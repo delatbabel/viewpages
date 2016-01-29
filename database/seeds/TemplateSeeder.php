@@ -15,7 +15,7 @@ class TemplateSeeder extends Seeder
         DB::table('vptemplates')->delete();
 
         // Sample template directory
-        $dirname = base_path('examples/templates');
+        $dirname = base_path('database/seeds/examples/templates');
 
         foreach (scandir($dirname) as $filename) {
             if (($filename == '.') || ($filename == '..')) {

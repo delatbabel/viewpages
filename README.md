@@ -56,6 +56,7 @@ Finally, incorporate and run the migration scripts to create the database tables
 
 ```php
     php artisan vendor:publish --tag=migrations --force
+    php artisan vendor:publish --tag=seeds --force
     php artisan migrate
 ```
 
