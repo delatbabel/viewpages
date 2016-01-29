@@ -7,6 +7,14 @@ front end frameworks), etc.
 
 **UNDER CONSTRUCTION, NOT YET READY FOR USE**
 
+## Rationale
+
+The lack of ability to have database backed views, templates, and layouts is one of the
+missing features that prevents Larvel from being used to create a truly dynamic CMS.  This
+package aims to fix that.
+
+Volunteers to help code this would be welcomed.
+
 ## Installation
 
 Add the package using composer from the command line:
@@ -82,7 +90,7 @@ template in some way.
 @include and @extends could be problematic as they have to decide whether to use a template
 or page.  @extends would normally refer to a template, @include in a template would refer
 to a template, in a page would refer to another page.  Perhaps we need to amalgamate the two
-classes (pages and templates).
+classes (pages and templates) into a single "View" model and table.
 
 Next issue is that inside the existing Laravel view classes, directives such as @include are
 complied to PHP code that in turn calls functions inside the view engine.  The extensions to
@@ -91,7 +99,11 @@ these classes in String_Blade_Compiler don't sufficiently change these functions
 (including string data) or a view name which is assumed to be a view on disk.
 
 So we may need another extension of the String_Blade_Compiler class to be able to have
-@include refer to a page or template name instead of a file name.
+@include refer to a page or template key instead of a file name.
+
+As an interim I have included a hack wereby you can include a {{ $page_content }} value
+in a template to have the associated page content included.  This doesn't work to insert
+a template's content into another template, however.  Also, it's an ugly hack.
 
 ## Callouts
 
@@ -116,4 +128,9 @@ renderable data blocks in the configs table, which is of course what it was desi
 
 # Architecture
 
-TODO
+I worked with a CMS system based on Laravel 3 that was fairly poor in its implementation,
+this package is designed to be a best practice implementation of what the Laravel 3 CMS
+was supposed to be.
+
+However it's fairly early in the design and proof of concept phase at the moment, and a lot
+of work needs to be done to determine what those best practices are going to be.
