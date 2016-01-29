@@ -62,6 +62,11 @@ Finally, incorporate and run the migration scripts to create the database tables
 # TODO
 
 * Code to pull and render a page from the database.
+* Extract the logic to find a page for a specific website from the make function and put
+  it into a customised BelongsToMany class.
+* Be able to handle all of the various directives in a normal Blade template
+  such as @extends, @section / @endsection, etc.  @extends should pull in
+  the template from the Vptemplate model class.
 * More testing.
 * More documentation.
 * Sample templates based on AdminLTE
