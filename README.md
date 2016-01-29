@@ -78,7 +78,7 @@ Finally, incorporate and run the migration scripts to create the database tables
 * More testing.
 * More documentation.
 * Sample templates based on AdminLTE
-* Maybe a set of admin controlle
+* Maybe a set of admin controllers to update / edit content in the database.
 
 ## Handling Directives
 
