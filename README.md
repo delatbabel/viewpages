@@ -12,7 +12,7 @@ front end frameworks), etc.
 Add the package using composer from the command line:
 
 ```
-    composer require delatbabel\viewpages
+    composer require delatbabel/viewpages
 ```
 
 Alternatively, pull the package in manually by adding these lines to your composer.json file:
@@ -34,7 +34,7 @@ Once that is done, run the composer update command:
 After composer update completes, add these lines to your config/app.php file in the 'providers' array:
 
 ```
-    Wpb\StringBladeCompiler\StringBladeCompilerServiceProvider::class,
+    Wpb\String_Blade_Compiler\ViewServiceProvider::class,
     Delatbabel\SiteConfig\SiteConfigServiceProvider::class,
     Delatbabel\ViewPages\ViewPagesServiceProvider::class,
 ```
@@ -44,8 +44,8 @@ After composer update completes, add these lines to your config/app.php file in 
 Finally, incorporate and run the migration scripts to create the database tables as follows:
 
 ```php
-php artisan vendor:publish --tag=migrations --force
-php artisan migrate
+    php artisan vendor:publish --tag=migrations --force
+    php artisan migrate
 ```
 
 # TODO
