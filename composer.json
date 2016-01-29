@@ -1,0 +1,26 @@
+{
+    "name": "delatbabel/viewpages",
+    "description": "Support rendering/view of Laravel pages and templates from a database.",
+    "keywords": ["laravel", "view", "render", "cms"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Del",
+            "email": "del@babel.com.au"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "wpb/string-blade-compiler": "3.*",
+        "delatbabel/applog": "~1.0",
+        "delatbabel/fluents": "~1.0",
+        "delatbabel/site-config": "~1.0",
+        "laravel/framework": "5.1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Delatbabel\\ViewPages\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
