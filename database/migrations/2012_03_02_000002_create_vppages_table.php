@@ -30,7 +30,7 @@ class CreateVppagesTable extends Migration
         /** @var \Illuminate\Database\Schema\Blueprint $table */
         Schema::create($this->tableName, function ($table) {
             $table->increments('id');
-            $table->string('vptemplate_key', 255)->unsigned()->index();
+            $table->string('vptemplate_key', 255)->default('main')->index();
             $table->string('key', 255)->default('')->index();
             $table->string('url', 255)->default('')->index();
             $table->string('name', 255)->default('');
