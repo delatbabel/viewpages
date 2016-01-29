@@ -38,10 +38,13 @@ class ViewPagesServiceProvider extends ServiceProvider
     {
         parent::boot($events);
 
-        // Publish the database migrations
+        // Publish the database migrations and seeders
         $this->publishes([
             __DIR__ . '/../database/migrations' => $this->app->databasePath() . '/migrations'
         ], 'migrations');
+        $this->publishes([
+            __DIR__ . '/../database/seeds' => $this->app->databasePath() . '/seeds'
+        ], 'seeds');
     }
 
     /**

@@ -7,6 +7,9 @@ namespace Delatbabel\ViewPages\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Delatbabel\SiteConfig\Models\Website;
+use Wpb\String_Blade_Compiler\StringView;
+use Wpb\String_Blade_Compiler\Facades\StringBlade;
+use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Class Vptemplate
@@ -45,6 +48,40 @@ class Vptemplate extends Model
     public function websites()
     {
         return $this->belongsToMany('Delatbabel\SiteConfig\Models\Website');
+    }
+
+    /**
+     * Render template
+     *
+     * TODO: Be able to handle all of the various directives in a normal
+     * Blade template such as @extends, @section / @endsection etc. This
+     * may require extending the StringView class.
+     *
+     * @param Arrayable|array $data
+     * @param Arrayable|array $mergeData
+     * @return StringView
+     */
+    public function render($data = array(), $mergeData = array())
+    {
+        $data = $this->parseData($data);
+        $mergeData = $this->parseData($mergeData);
+
+        return StringBlade::make([
+            'template'      => $this->content,
+            'cache_key'     => $this->id,
+            'updated_at'    => $this->updated_at->format('U'),
+        ], $data, $mergeData);
+    }
+
+    /**
+     * Parse the given data into a raw array.
+     *
+     * @param  Arrayable|array  $data
+     * @return array
+     */
+    protected function parseData($data)
+    {
+        return $data instanceof Arrayable ? $data->toArray() : $data;
     }
 
     /**
