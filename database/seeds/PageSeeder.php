@@ -41,7 +41,8 @@ class PageSeeder extends Seeder
                     'url'               => $dirname . '/' . $page_name,
                     'name'              => $dirname . '.' . $page_name,
                     'description'       => $page_name . ' page loaded from ' . $filename,
-                    'content'           => file_get_contents($dirname . DIRECTORY_SEPARATOR . $filename),
+                    'content'           => file_get_contents($topdir . DIRECTORY_SEPARATOR .
+                        $dirname . DIRECTORY_SEPARATOR . $filename),
                 ]);
             }
         }
