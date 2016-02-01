@@ -15,6 +15,10 @@ package aims to fix that.
 
 Volunteers to help code this would be welcomed.
 
+TerrePorter partially solves this issue with his StringBladeCompiler package, which is
+used by this package as a dependency.  His package was originally based on Flynsarmy/laravel-db-blade-compiler
+which did support taking a blade from a model object but is no longer maintained.
+
 ## Installation
 
 Add the package using composer from the command line:
@@ -178,3 +182,8 @@ was supposed to be.
 
 However it's fairly early in the design and proof of concept phase at the moment, and a lot
 of work needs to be done to determine what those best practices are going to be.
+
+# References
+
+* https://github.com/Flynsarmy/laravel-db-blade-compiler
+* https://github.com/TerrePorter/StringBladeCompiler (the 3.0 branch)
