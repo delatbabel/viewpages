@@ -30,7 +30,7 @@ class CreateVpagesTable extends Migration
         /** @var \Illuminate\Database\Schema\Blueprint $table */
         Schema::create($this->tableName, function ($table) {
             $table->increments('id');
-            $table->string('key', 255)->default('')->index();
+            $table->string('pagekey', 255)->default('')->index();
             $table->string('url', 255)->default('')->index();
             $table->string('name', 255)->default('');
             $table->string('description', 255)->nullable();

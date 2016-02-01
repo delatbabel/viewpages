@@ -33,14 +33,14 @@ class PageSeeder extends Seeder
                     continue;
                 }
 
-                $page_name = $dirname . '.' . str_replace('.blade.php', '', $filename);
+                $page_name = str_replace('.blade.php', '', $filename);
 
                 // Create the page
                 Vpage::create([
-                    'key'               => $dirname . '.' . $page_name,
+                    'pagekey'           => $dirname . '.' . $page_name,
                     'url'               => $dirname . '/' . $page_name,
                     'name'              => $dirname . '.' . $page_name,
-                    'description'       => $page_name . ' page loaded from ' . $filename,
+                    'description'       => $page_name . ' page loaded from ' . $dirname . '/' . $filename,
                     'content'           => file_get_contents($topdir . DIRECTORY_SEPARATOR .
                         $dirname . DIRECTORY_SEPARATOR . $filename),
                 ]);
