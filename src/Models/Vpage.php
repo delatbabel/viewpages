@@ -1,6 +1,6 @@
 <?php
 /**
- * Vppage model
+ * Vpage model
  */
 namespace Delatbabel\ViewPages\Models;
 
@@ -12,14 +12,14 @@ use Wpb\String_Blade_Compiler\Facades\StringBlade;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * Class Vppage
+ * Class Vpage
  *
  * This model class is for the database backed website templates table.
  *
  * ### Example
  *
  * <code>
- * $page = Vppage::make('index');
+ * $page = Vpage::make('index');
  * </code>
  *
  * ### TODO
@@ -31,7 +31,7 @@ use Illuminate\Contracts\Support\Arrayable;
  * such as @extends, @section / @endsection, etc.  @extends should pull in
  * the template from the Vptemplate model class.
  */
-class Vppage extends Model
+class Vpage extends Model
 {
     use SoftDeletes;
 
@@ -39,16 +39,6 @@ class Vppage extends Model
         'vptemplate_id', 'is_secure', 'is_homepage', 'content'];
 
     protected $dates = ['deleted_at'];
-
-    /**
-     * 1:Many relationship with Vppage model
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function configs()
-    {
-        return $this->hasMany('Delatbabel\ViewPages\Models\Vppage');
-    }
 
     /**
      * Many:Many relationship with Website model
@@ -67,9 +57,6 @@ class Vppage extends Model
      * Blade template such as @extends, @section / @endsection etc. This
      * may require extending the StringView class.
      *
-     * Currently, as a work-around, it inserts the page content into the
-     * template content as variable $page_content.
-     *
      * @param Arrayable|array $data
      * @param Arrayable|array $mergeData
      * @return StringView
@@ -85,12 +72,8 @@ class Vppage extends Model
             'cache_key'     => $this->id,
             'updated_at'    => $this->updated_at->format('U'),
         ], $data, $mergeData);
-        $page_content = $page_view->render();
 
-        $template = $this->fetchTemplate();
-        $data = array_merge($mergeData, $data);
-        $template_view = $template->render($data, ['page_content' => $page_content]);
-        return $template_view;
+        return $page_view;
     }
 
     /**
@@ -107,23 +90,23 @@ class Vppage extends Model
     /**
      * Make page
      *
-     * Returns a Vppage object for a specific URL for the current website.
+     * Returns a Vpage object for a specific URL for the current website.
      *
-     * A Vppage object can either be for a specific website or websites,
-     * in which case there will be a join table entry in vppage_website
-     * containing (vppage_id, website_id), or the Vppage can be for all
+     * A Vpage object can either be for a specific website or websites,
+     * in which case there will be a join table entry in vpage_website
+     * containing (vpage_id, website_id), or the Vpage can be for all
      * websites, which means that there will be no join table entry in
-     * vppage_website for that vppage_id at all (for any website).
+     * vpage_website for that vpage_id at all (for any website).
      *
-     * Multiple pages can exist in the vppages table for any given URL.
+     * Multiple pages can exist in the vpages table for any given URL.
      *
-     * This function finds the correct page in vppages that matches the
+     * This function finds the correct page in vpages that matches the
      * given URL and has a join to the current website, or if that fails
-     * then it will find the correct page in vppages for the given URL
+     * then it will find the correct page in vpages for the given URL
      * that has no joins to any website.
      *
      * @param string $url
-     * @return Vppage
+     * @return Vpage
      */
     public static function make($url = 'index')
     {
@@ -139,8 +122,8 @@ class Vppage extends Model
 
         // Try to find a page that is joined to the current website
         $page = static::where('url', '=', $url)
-            ->join('vppage_website', 'vppage.id', '=', 'vppage_website.vppage_id')
-            ->where('vppage_website.website_id', '=', $website_id)
+            ->join('vpage_website', 'vpage.id', '=', 'vpage_website.vpage_id')
+            ->where('vpage_website.website_id', '=', $website_id)
             ->first();
         if (! empty($page)) {
             return $page;
@@ -149,8 +132,8 @@ class Vppage extends Model
         // If there is no such page, try to find a page that is not joined
         // to any website
         $page = static::where('url', '=', $url)
-            ->leftJoin('vppage_website', 'vppages.id', '=', 'vppage_website.vppage_id')
-            ->whereNull('vppage_website.website_id')
+            ->leftJoin('vpage_website', 'vpages.id', '=', 'vpage_website.vpage_id')
+            ->whereNull('vpage_website.website_id')
             ->first();
         if (! empty($page)) {
             return $page;
@@ -164,15 +147,5 @@ class Vppage extends Model
 
         // If we have no page so far, fetch the 404 page
         return static::make('410');
-    }
-
-    /**
-     * Return the template for the current page and website.
-     *
-     * @return Vptemplate
-     */
-    public function fetchTemplate()
-    {
-        return Vptemplate::make($this->vptemplate_key);
     }
 }

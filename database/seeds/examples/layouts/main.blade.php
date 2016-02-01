@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>{{ $page_title or "Application Title" }}</title>
+	<title>{{ $page_title or "OmniGate" }}</title>
 	<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 	<!-- Bootstrap 3.3.4 -->
 	<link href="/bower_components/admin-lte/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -74,7 +74,7 @@ desired effect
 
 		<!-- Main content -->
 		<section class="content">
-            {{ $page_content }}
+            @yield('content')
 		</section><!-- /.content -->
 	</div><!-- /.content-wrapper -->
 

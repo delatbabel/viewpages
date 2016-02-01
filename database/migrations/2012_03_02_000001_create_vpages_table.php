@@ -1,23 +1,23 @@
 <?php
 /**
- * Class CreateVppagesTable
+ * Class CreateVpagesTable
  */
 
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateVppagesTable
+ * Class CreateVpagesTable
  *
- * Migration script that creates the vptemplates table.
+ * Migration script that creates the vpages table.
  */
-class CreateVppagesTable extends Migration
+class CreateVpagesTable extends Migration
 {
     /**@var string */
     protected $tableName;
 
     public function __construct()
     {
-        $this->tableName = 'vppages';
+        $this->tableName = 'vpages';
     }
 
     /**
@@ -30,7 +30,6 @@ class CreateVppagesTable extends Migration
         /** @var \Illuminate\Database\Schema\Blueprint $table */
         Schema::create($this->tableName, function ($table) {
             $table->increments('id');
-            $table->string('vptemplate_key', 255)->default('main')->index();
             $table->string('key', 255)->default('')->index();
             $table->string('url', 255)->default('')->index();
             $table->string('name', 255)->default('');

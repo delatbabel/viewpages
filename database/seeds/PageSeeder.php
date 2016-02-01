@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Delatbabel\ViewPages\Models\Vppage;
+use Delatbabel\ViewPages\Models\Vpage;
 
 class PageSeeder extends Seeder
 {
@@ -12,27 +12,38 @@ class PageSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('vppages')->delete();
+        DB::table('vpages')->delete();
 
         // Sample page directory
-        $dirname = base_path('database/seeds/examples/pages');
+        $topdir = base_path('database/seeds/examples');
 
-        foreach (scandir($dirname) as $filename) {
-            if (($filename == '.') || ($filename == '..')) {
+        foreach (scandir($topdir) as $dirname) {
+            // Read all of the directories under the top level directory.
+            if (($dirname == '.') || ($dirname == '..')) {
                 continue;
             }
 
-            $page_name = str_replace('.blade.php', '', $filename);
+            if (! is_dir($topdir . DIRECTORY_SEPARATOR . $dirname)) {
+                continue;
+            }
 
-            // Create the page
-            Vppage::create([
-                'vptemplate_key'    => 'layout.main',
-                'key'               => 'page.' . $page_name,
-                'url'               => $page_name,
-                'name'              => $page_name,
-                'description'       => $page_name . ' page',
-                'content'           => file_get_contents($dirname . DIRECTORY_SEPARATOR . $filename),
-            ]);
+            // Read all of the files in each directory.
+            foreach (scandir($topdir . DIRECTORY_SEPARATOR . $dirname) as $filename) {
+                if (($filename == '.') || ($filename == '..')) {
+                    continue;
+                }
+
+                $page_name = $dirname . '.' . str_replace('.blade.php', '', $filename);
+
+                // Create the page
+                Vpage::create([
+                    'key'               => $dirname . '.' . $page_name,
+                    'url'               => $dirname . '/' . $page_name,
+                    'name'              => $dirname . '.' . $page_name,
+                    'description'       => $page_name . ' page loaded from ' . $filename,
+                    'content'           => file_get_contents($dirname . DIRECTORY_SEPARATOR . $filename),
+                ]);
+            }
         }
     }
 }

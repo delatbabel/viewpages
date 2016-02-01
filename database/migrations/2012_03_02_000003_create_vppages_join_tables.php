@@ -1,16 +1,16 @@
 <?php
 /**
- * Class CreateVppagesJoinTables
+ * Class CreateVpagesJoinTables
  */
 
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateVppagesJoinTables
+ * Class CreateVpagesJoinTables
  *
  * Migration script that creates the vptemplates table.
  */
-class CreateVppagesJoinTables extends Migration
+class CreateVpagesJoinTables extends Migration
 {
     /**
      * Run the migrations.
@@ -20,29 +20,13 @@ class CreateVppagesJoinTables extends Migration
     public function up()
     {
         /** @var \Illuminate\Database\Schema\Blueprint $table */
-        Schema::create('vptemplate_website', function ($table) {
+        Schema::create('vpage_website', function ($table) {
             $table->increments('id');
-            $table->integer('vptemplate_id')->unsigned();
+            $table->integer('vpage_id')->unsigned();
             $table->integer('website_id')->unsigned()->nullable();
 
-            $table->foreign('vptemplate_id')
-                ->references('id')->on('vptemplates')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->foreign('website_id')
-                ->references('id')->on('websites')
-                ->onDelete('set null')
-                ->onUpdate('cascade');
-        });
-
-        /** @var \Illuminate\Database\Schema\Blueprint $table */
-        Schema::create('vppage_website', function ($table) {
-            $table->increments('id');
-            $table->integer('vppage_id')->unsigned();
-            $table->integer('website_id')->unsigned()->nullable();
-
-            $table->foreign('vppage_id')
-                ->references('id')->on('vppages')
+            $table->foreign('vpage_id')
+                ->references('id')->on('vpages')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->foreign('website_id')
@@ -59,7 +43,6 @@ class CreateVppagesJoinTables extends Migration
      */
     public function down()
     {
-        Schema::drop('vppage_website');
-        Schema::drop('vptemplate_website');
+        Schema::drop('vpage_website');
     }
 }
