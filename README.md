@@ -10,7 +10,7 @@ front end frameworks), etc.
 ## Rationale
 
 The lack of ability to have database backed views, templates, and layouts is one of the
-missing features that prevents Larvel from being used to create a truly dynamic CMS.  This
+missing features that prevents Laravel from being used to create a truly dynamic CMS.  This
 package aims to fix that.
 
 Volunteers to help code this would be welcomed.
