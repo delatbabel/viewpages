@@ -43,23 +43,17 @@ Once that is done, run the composer update command:
 
 ### Register Service Provider
 
-After composer update completes, add these lines to your config/app.php file in the 'providers' array:
-
-```
-    Delatbabel\SiteConfig\SiteConfigServiceProvider::class,
-    Delatbabel\ViewPages\ViewPagesServiceProvider::class,
-```
-
-In the same file, replace this line (or comment it out):
+After composer update completes, remove this line from your config/app.php file in the 'providers'
+array (or comment it out):
 
 ```
     Illuminate\View\ViewServiceProvider::class
 ```
 
-with this:
+Replace it with this line:
 
 ```
-    Wpb\String_Blade_Compiler\ViewServiceProvider::class,
+    Delatbabel\ViewPages\ViewPagesServiceProvider::class,
 ```
 
 ### Incorporate and Run the Migrations

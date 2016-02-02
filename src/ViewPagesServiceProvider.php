@@ -45,6 +45,11 @@ class ViewPagesServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../database/seeds' => $this->app->databasePath() . '/seeds'
         ], 'seeds');
+
+        // Register other providers required by this provider, which saves the caller
+        // from having to register them each individually.
+        \App::register(\Delatbabel\SiteConfig\SiteConfigServiceProvider::class);
+        \App::register(\Delatbabel\ViewPages\ViewServiceProvider::class);
     }
 
     /**
