@@ -5,7 +5,7 @@ Support view/rendering of Laravel pages and templates from a database.
 Can be used for content management, admin interfaces (e.g. using AdminLTE or other
 front end frameworks), etc.
 
-**UNDER CONSTRUCTION, NOT YET READY FOR USE**
+**UNDER CONSTRUCTION, NOT ENTIRELY STABLE YET**
 
 ## Rationale
 
@@ -70,30 +70,55 @@ Finally, incorporate and run the migration scripts to create the database tables
 
 * Extract the logic to find a page for a specific website from the make function and put
   it into a customised BelongsToMany class.
-* Be able to handle all of the various directives in a normal Blade template
-  such as @extends, @section / @endsection, etc.  See **Handling Directives** below.
 * More testing.
 * More documentation.
 * Maybe a set of admin controllers to update / edit content in the database.
 
+## Callouts
+
+The original package that this was derived from had the idea of callouts.  This meant that
+views could include calls like this:
+
+```php
+    {{ __o('toolbox@functionname') }}
+```
+
+__o was a helper function that called the Controller::call() function in Laravel 3 to render
+the output of the "functionname" action on the toolbox controller in a HMVC like manner.  HMVC
+is really no longer supported by Laravel 5 (and Taylor thinks that HMVC is a bad idea, which
+I have to disagree with) so we need some other way of pulling in dynamic content.  This will
+probably be via Repository or Service classes somehow.
+
+## Website Data Objects and Blocks
+
+These are website dependent data blocks.  It may be preferable to store website dependent
+data including renderable data blocks in the configs table, which is of course what it was
+designed for.
+
+# Architecture
+
+I worked with a CMS system based on Laravel 3 that was fairly poor in its implementation,
+this package is designed to be a best practice implementation of what the Laravel 3 CMS
+was supposed to be.
+
 ## Handling Directives
 
-It would be useful to be able to handle all of the directives in a normal Blade
-template in some way.
-
-The issue is that inside the existing Laravel view classes, directives such as @include are
-complied to PHP code that in turn calls functions inside the view engine.  The extensions to
-these classes in String_Blade_Compiler don't sufficiently change these functions so that
-@include can refer to another template inside a model class -- it handles either an array
-(including string data) or a view name which is assumed to be a view on disk.
-
-So we may need another extension of the String_Blade_Compiler class to be able to have
+I have extended the Factory class within String_Blade_Compiler class to be able to have
 @include refer to a page or template key instead of a file name.  See **Blade Compilation**
 below.
 
-I had included a hack wereby you can include a {{ $page_content }} value
-in a template to have the associated page content included for testing purposes.  I have
-since removed this.
+## Handling View Names
+
+A view can be found by name or URL.  A CMS may prefer to fetch views by URL, a system that
+is just working on view names may prefer to fetch by page key (e.g. layouts.master).  The
+Factory class attempts to find by key first, and then by URL.
+
+If a view is not found in the database then a view by that key is searched for on disk.
+
+If no view is found on the disk then the errors.410 and then the errors.404 views are searched
+for in the database.
+
+If no view is found at that point then an exception is thrown.
 
 ## Blade Compilation
 
@@ -142,40 +167,25 @@ String_Blade_Compiler extension it is an instance of Wpb\String_Blade_Compiler\F
 That class implements the necessary make(), startSection(), stopSection() and yieldContent()
 functions, which make the content appear in the correct place.
 
-The critical function is make() which needs to be extended so that it is able to pull the
-view from the database instead of from disk.
+The critical function is make() which has been extended so that it is able to pull the
+view from the database instead of from disk.  The logic of pulling the view from the
+database is all in the Vpage::make() function.  Once the content of the blade is pulled
+from the database then it's passed back up to String_Blade_Compiler\Factory::make to do
+the actual rendering.
 
-I *think* that's the only change that needs making in an extended version of Factory.
+## Service Provider
 
-## Callouts
+The service provider here is fairly simple -- however there are 2:
 
-The original package that this was derived from had the idea of callouts.  This meant that
-views could include calls like this:
+* ViewPagesServiceProvider -- does the normal registration of migrations, seeds, and also calls
+  in ViewServiceProvider.
+* ViewServiceProvider -- extends the Service Provider in String_Blade_Compiler so that my own
+  Factory class is inserted when the factory is registered rather than the original.
 
-```php
-    {{ __o('toolbox@functionname') }}
-```
+## Model Class
 
-__o was a helper function that called the Controller::call() function in Laravel 3 to render
-the output of the "functionname" action on the toolbox controller in a HMVC like manner.  HMVC
-is really no longer supported by Laravel 5 (and Taylor thinks that HMVC is a bad idea, which
-I have to disagree with) so we need some other way of pulling in dynamic content.  This will
-probably be via Repository or Service classes somehow.
-
-## Website Data Objects and Blocks
-
-These are website dependent data blocks.  It may be preferable to store website dependent
-data including renderable data blocks in the configs table, which is of course what it was
-designed for.
-
-# Architecture
-
-I worked with a CMS system based on Laravel 3 that was fairly poor in its implementation,
-this package is designed to be a best practice implementation of what the Laravel 3 CMS
-was supposed to be.
-
-However it's fairly early in the design and proof of concept phase at the moment, and a lot
-of work needs to be done to determine what those best practices are going to be.
+The model class (Vpage) replaces the on-disk storage of template files, so that the Factory
+class discussed above can pull templates from the database rather than disk.
 
 # References
 

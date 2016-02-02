@@ -95,7 +95,7 @@ class Vpage extends Model
             ->first();
         if (! empty($page)) {
             #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-            #    'Found vpage on first look', $page->toArray());
+            #    'Found vpage on first look,  ID == ' . $page->id);
             return $page;
         }
 
@@ -107,19 +107,8 @@ class Vpage extends Model
             ->whereNull('vpage_website.website_id')
             ->select('vpages.id AS id', 'vpages.content AS content', 'vpages.updated_at AS updated_at')
             ->first();
-        if (! empty($page)) {
-            #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-            #    'Found vpage on second look', $page->toArray());
-            return $page;
-        }
-
-        // If we have no page so far, fetch the 410 page
-        $page = static::make('errors.410');
-        if (! empty($page)) {
-            return $page;
-        }
-
-        // If we have no page so far, fetch the 404 page
-        return static::make('errors.410');
+        #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+        #    'Found vpage on second look,  ID == ' . $page->id);
+        return $page;
     }
 }
