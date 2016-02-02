@@ -7,6 +7,7 @@ namespace Delatbabel\ViewPages;
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\App;
 
 /**
  * ViewPages Service Provider
@@ -48,8 +49,8 @@ class ViewPagesServiceProvider extends ServiceProvider
 
         // Register other providers required by this provider, which saves the caller
         // from having to register them each individually.
-        \App::register(\Delatbabel\SiteConfig\SiteConfigServiceProvider::class);
-        \App::register(\Delatbabel\ViewPages\ViewServiceProvider::class);
+        App::register(\Delatbabel\SiteConfig\SiteConfigServiceProvider::class);
+        App::register(\Delatbabel\ViewPages\ViewServiceProvider::class);
     }
 
     /**

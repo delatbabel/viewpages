@@ -7,9 +7,6 @@ namespace Delatbabel\ViewPages\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Delatbabel\SiteConfig\Models\Website;
-use Wpb\String_Blade_Compiler\StringView;
-use Wpb\String_Blade_Compiler\Facades\StringBlade;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -27,10 +24,6 @@ use Illuminate\Support\Facades\Log;
  *
  * Extract the logic to find a page for a specific website from the make
  * function and put it into a customised BelongsToMany class.
- *
- * Be able to handle all of the various directives in a normal Blade template
- * such as @extends, @section / @endsection, etc.  @extends should pull in
- * the template from the Vptemplate model class.
  */
 class Vpage extends Model
 {
@@ -49,17 +42,6 @@ class Vpage extends Model
     public function websites()
     {
         return $this->belongsToMany('Delatbabel\SiteConfig\Models\Website');
-    }
-
-    /**
-     * Parse the given data into a raw array.
-     *
-     * @param  Arrayable|array  $data
-     * @return array
-     */
-    protected function parseData($data)
-    {
-        return $data instanceof Arrayable ? $data->toArray() : $data;
     }
 
     /**
@@ -98,8 +80,8 @@ class Vpage extends Model
             $url = 'index';
         }
 
-        Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-            'Make vpage by ' . $field . ' = ' . $url);
+        #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+        #    'Make vpage by ' . $field . ' = ' . $url);
 
         // Find the current website ID
         $website_id = Website::currentWebsiteId();
@@ -112,8 +94,8 @@ class Vpage extends Model
             ->select('vpages.id AS id', 'vpages.content AS content', 'vpages.updated_at AS updated_at')
             ->first();
         if (! empty($page)) {
-            Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-                'Found vpage on first look', $page->toArray());
+            #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+            #    'Found vpage on first look', $page->toArray());
             return $page;
         }
 
@@ -126,8 +108,8 @@ class Vpage extends Model
             ->select('vpages.id AS id', 'vpages.content AS content', 'vpages.updated_at AS updated_at')
             ->first();
         if (! empty($page)) {
-            Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-                'Found vpage on second look', $page->toArray());
+            #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+            #    'Found vpage on second look', $page->toArray());
             return $page;
         }
 

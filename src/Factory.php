@@ -42,7 +42,6 @@ class Factory extends BaseFactory
         $viewModel = Vpage::make($view);
 
         // Now tell the parent to render the view.
-        /** @var StringView $page_view */
         return parent::make([
             'template'      => $viewModel->content,
             'cache_key'     => $viewModel->id,
