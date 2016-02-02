@@ -122,7 +122,7 @@ class Vpage extends Model
 
         // Try to find a page that is joined to the current website
         $page = static::where('url', '=', $url)
-            ->join('vpage_website', 'vpage.id', '=', 'vpage_website.vpage_id')
+            ->join('vpage_website', 'vpages.id', '=', 'vpage_website.vpage_id')
             ->where('vpage_website.website_id', '=', $website_id)
             ->first();
         if (! empty($page)) {
