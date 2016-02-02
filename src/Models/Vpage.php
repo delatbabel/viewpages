@@ -140,12 +140,12 @@ class Vpage extends Model
         }
 
         // If we have no page so far, fetch the 410 page
-        $page = static::make('410');
+        $page = static::make('errors.410');
         if (! empty($page)) {
             return $page;
         }
 
         // If we have no page so far, fetch the 404 page
-        return static::make('410');
+        return static::make('errors.410');
     }
 }
