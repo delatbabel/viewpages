@@ -109,7 +109,7 @@ class Vpage extends Model
         $page = static::where($field, '=', $url)
             ->join('vpage_website', 'vpages.id', '=', 'vpage_website.vpage_id')
             ->where('vpage_website.website_id', '=', $website_id)
-            ->select('vpage.id AS id', 'vpage.content AS content', 'vpage.updated_at AS updated_at')
+            ->select('vpages.id AS id', 'vpages.content AS content', 'vpages.updated_at AS updated_at')
             ->first();
         if (! empty($page)) {
             Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
@@ -123,6 +123,7 @@ class Vpage extends Model
         $page = static::where($field, '=', $url)
             ->leftJoin('vpage_website', 'vpages.id', '=', 'vpage_website.vpage_id')
             ->whereNull('vpage_website.website_id')
+            ->select('vpages.id AS id', 'vpages.content AS content', 'vpages.updated_at AS updated_at')
             ->first();
         if (! empty($page)) {
             Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
