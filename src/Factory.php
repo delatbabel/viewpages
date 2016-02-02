@@ -38,9 +38,15 @@ class Factory extends BaseFactory
         }
 
         // If the view is a string we want to do a database lookup
-        // to fetch the view contents.  We put a render function
-        // inside the Vpage model class to do that for us.
+        // to fetch the view contents.
         $viewModel = Vpage::make($view);
-        return $viewModel->render($data, $mergeData);
+
+        // Now tell the parent to render the view.
+        /** @var StringView $page_view */
+        return parent::make([
+            'template'      => $viewModel->content,
+            'cache_key'     => $viewModel->id,
+            'updated_at'    => $viewModel->updated_at->format('U'),
+        ], $data, $mergeData);
     }
 }

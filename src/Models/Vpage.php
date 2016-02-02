@@ -52,35 +52,6 @@ class Vpage extends Model
     }
 
     /**
-     * Render page
-     *
-     * TODO: Be able to handle all of the various directives in a normal
-     * Blade template such as @extends, @section / @endsection etc. This
-     * may require extending the StringView class.
-     *
-     * @param Arrayable|array $data
-     * @param Arrayable|array $mergeData
-     * @return StringView
-     */
-    public function render($data = array(), $mergeData = array())
-    {
-        $data = $this->parseData($data);
-        $mergeData = $this->parseData($mergeData);
-
-        Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-            'Render vpage ID ' . $this->id);
-
-        /** @var StringView $page_view */
-        $page_view = StringBlade::make([
-            'template'      => $this->content,
-            'cache_key'     => $this->id,
-            'updated_at'    => $this->updated_at->format('U'),
-        ], $data, $mergeData);
-
-        return $page_view;
-    }
-
-    /**
      * Parse the given data into a raw array.
      *
      * @param  Arrayable|array  $data
@@ -134,21 +105,28 @@ class Vpage extends Model
         $website_id = Website::currentWebsiteId();
 
         // Try to find a page that is joined to the current website
+        /** @var Vpage $page */
         $page = static::where($field, '=', $url)
             ->join('vpage_website', 'vpages.id', '=', 'vpage_website.vpage_id')
             ->where('vpage_website.website_id', '=', $website_id)
+            ->select('vpage.id AS id', 'vpage.content AS content', 'vpage.updated_at AS updated_at')
             ->first();
         if (! empty($page)) {
+            Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+                'Found vpage on first look', $page->toArray());
             return $page;
         }
 
         // If there is no such page, try to find a page that is not joined
         // to any website
+        /** @var Vpage $page */
         $page = static::where($field, '=', $url)
             ->leftJoin('vpage_website', 'vpages.id', '=', 'vpage_website.vpage_id')
             ->whereNull('vpage_website.website_id')
             ->first();
         if (! empty($page)) {
+            Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+                'Found vpage on second look', $page->toArray());
             return $page;
         }
 
