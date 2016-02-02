@@ -10,6 +10,7 @@ use Delatbabel\SiteConfig\Models\Website;
 use Wpb\String_Blade_Compiler\StringView;
 use Wpb\String_Blade_Compiler\Facades\StringBlade;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class Vpage
@@ -66,6 +67,9 @@ class Vpage extends Model
         $data = $this->parseData($data);
         $mergeData = $this->parseData($mergeData);
 
+        Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+            'Render vpage ID ' . $this->id);
+
         /** @var StringView $page_view */
         $page_view = StringBlade::make([
             'template'      => $this->content,
@@ -90,7 +94,8 @@ class Vpage extends Model
     /**
      * Make page
      *
-     * Returns a Vpage object for a specific URL for the current website.
+     * Returns a Vpage object for a specific pagekey or URL for the
+     * current website.
      *
      * A Vpage object can either be for a specific website or websites,
      * in which case there will be a join table entry in vpage_website
@@ -105,10 +110,15 @@ class Vpage extends Model
      * then it will find the correct page in vpages for the given URL
      * that has no joins to any website.
      *
+     * Finding by URL is common in CMS front ends, otherwise to emulate
+     * the functionality of Laravel's View::make() function use the
+     * 'pagekey' option.
+     *
      * @param string $url
+     * @param string $field 'pagekey' or 'url'
      * @return Vpage
      */
-    public static function make($url = 'index')
+    public static function make($url = 'index', $field = 'pagekey')
     {
         $url = filter_var($url, FILTER_SANITIZE_STRING);
 
@@ -117,11 +127,14 @@ class Vpage extends Model
             $url = 'index';
         }
 
+        Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+            'Make vpage by ' . $field . ' = ' . $url);
+
         // Find the current website ID
         $website_id = Website::currentWebsiteId();
 
         // Try to find a page that is joined to the current website
-        $page = static::where('url', '=', $url)
+        $page = static::where($field, '=', $url)
             ->join('vpage_website', 'vpages.id', '=', 'vpage_website.vpage_id')
             ->where('vpage_website.website_id', '=', $website_id)
             ->first();
@@ -131,7 +144,7 @@ class Vpage extends Model
 
         // If there is no such page, try to find a page that is not joined
         // to any website
-        $page = static::where('url', '=', $url)
+        $page = static::where($field, '=', $url)
             ->leftJoin('vpage_website', 'vpages.id', '=', 'vpage_website.vpage_id')
             ->whereNull('vpage_website.website_id')
             ->first();
