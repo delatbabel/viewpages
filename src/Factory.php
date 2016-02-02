@@ -30,7 +30,6 @@ class Factory extends BaseFactory
      */
     public function make($view, $data = [], $mergeData = [])
     {
-
         if (is_array($view)) {
             // If the view is an array we want to pass it to the parent
             // class which will be Wpb\String_Blade_Compiler\Factory

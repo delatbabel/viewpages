@@ -2,6 +2,7 @@
 /**
  * ViewServiceProvider
  */
+
 namespace Delatbabel\ViewPages;
 
 use Wpb\String_Blade_Compiler\ViewServiceProvider as BaseViewServiceProvider;
