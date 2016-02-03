@@ -82,16 +82,16 @@ few examples based on [AdminLTE](https://almsaeedstudio.com/).
 * **name** -- a descriptive name of the page, eg "main website home page".
 * **description** -- a longer description of the page.
 
-The important thing here is the **pagekey**.  This basically takes the place of the template
-name used to find the template in the existing Laravel views.  So, for example, if you would
-normally use View::make("dashboard.sysadmin"); to find the template, you would normally store
-the template in resources/views/dashboard/sysadmin.blade.php.  Instead you would store the
-template in the vpages table with pagekey = "dashboard.sysadmin".
+The important thing here is the **pagekey**.  This basically takes the place of the view
+name used to find the view in the existing Laravel View facade.  So, for example, if you would
+normally use View::make("dashboard.sysadmin"); to find the view, you would normally store
+the view on disk in resources/views/dashboard/sysadmin.blade.php.  Instead you would store the
+view in the vpages table with pagekey = "dashboard.sysadmin".
 
 ## Creating Templates
 
 You can still use templates (layouts) as you normally would in Laravel.  For example, your
-layout can contain this:
+template can contain this:
 
 ```html
 <html>
@@ -112,8 +112,8 @@ The body can then contain this:
 @endsection
 ```
 
-Store the layout view with pagekey = 'layouts.main' and it will automatically be found and extended
-by your body view.
+Store the template in the vpages table with pagekey = 'layouts.main' and it will automatically
+be found and extended by your body view.
 
 See [Template Inheritance](https://laravel.com/docs/5.1/blade#template-inheritance) for more details.
 
