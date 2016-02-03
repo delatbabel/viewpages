@@ -3,8 +3,18 @@
 use Illuminate\Database\Seeder;
 use Delatbabel\ViewPages\Models\Vpage;
 
-class PageSeeder extends Seeder
+class ExamplePageSeeder extends Seeder
 {
+    /**
+     * Override this function to provide a base path
+     *
+     * @return string
+     */
+    protected function getBasePath()
+    {
+        return base_path('database/seeds/examples');
+    }
+
     /**
      * Run the database seeds.
      *
@@ -15,7 +25,7 @@ class PageSeeder extends Seeder
         DB::table('vpages')->delete();
 
         // Sample page directory
-        $topdir = base_path('database/seeds/examples');
+        $topdir = $this->getBasePath();
 
         foreach (scandir($topdir) as $dirname) {
             // Read all of the directories under the top level directory.
