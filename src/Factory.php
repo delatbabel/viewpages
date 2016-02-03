@@ -24,6 +24,15 @@ class Factory extends BaseFactory
     /**
      * Get the evaluated view contents for the given view.
      *
+     * This function will try to find the view by doing the following
+     * steps in order until a hit is found:
+     *
+     * * Look in the vpages table for a vpage with pagekey = dashboard.sysadmin.
+     * * Look in the vpages table for a vpage with url = dashboard.sysadmin.
+     * * Look on disk for a view called resources/views/sysadmin/dashboard.blade.php
+     * * Look in the vpages table for a vpage with pagekey = errors.410
+     * * Look in the vpages table for a vpage with pagekey = errors.404
+     *
      * @param  array|string  $view
      * @param  array   $data
      * @param  array   $mergeData

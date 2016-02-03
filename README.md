@@ -19,7 +19,7 @@ TerrePorter partially solves this issue with his StringBladeCompiler package, wh
 used by this package as a dependency.  His package was originally based on Flynsarmy/laravel-db-blade-compiler
 which did support taking a blade from a model object but is no longer maintained.
 
-## Installation
+# Installation
 
 Add the package using composer from the command line:
 
@@ -41,7 +41,7 @@ Once that is done, run the composer update command:
     composer update
 ```
 
-### Register Service Provider
+## Register Service Provider
 
 After composer update completes, remove this line from your config/app.php file in the 'providers'
 array (or comment it out):
@@ -56,7 +56,7 @@ Replace it with this line:
     Delatbabel\ViewPages\ViewPagesServiceProvider::class,
 ```
 
-### Incorporate and Run the Migrations
+## Incorporate and Run the Migrations
 
 Finally, incorporate and run the migration scripts to create the database tables as follows:
 
@@ -65,6 +65,49 @@ Finally, incorporate and run the migration scripts to create the database tables
     php artisan vendor:publish --tag=seeds --force
     php artisan migrate
 ```
+
+Prior to running the migration scripts you may want to alter the scripts themselves, or
+alter the base templates contained in database/seeds/examples.  The ones provided are a
+few examples based on [AdminLTE](https://almsaeedstudio.com/).
+
+# How to Use This Package
+
+## Creating Templates
+
+* Install and run the migrations as per the above.
+* Populate the vpages table with your templates.  They do not have to look any different
+  to standard Laravel blade templates -- see the section below on **Blade Compilation**.
+* In addition to the *content* column which should contain the template or page content,
+  populate the following columns:
+* **pagekey** -- page or template name.
+* **url** -- URL, may be useful when you want to look up page content by URL.
+* **name** -- a descriptive name of the page, eg "main website home page".
+* **description** -- a longer description of the page.
+
+The important thing here is the **pagekey**.  This basically takes the place of the template
+name used to find the template in the existing Laravel views.  So, for example, if you would
+normally use View::make("dashboard.sysadmin"); to find the template, you would normally store
+the template in resources/views/dashboard/sysadmin.blade.php.  Instead you would store the
+template in the vpages table with pagekey = "dashboard.sysadmin".
+
+## Using Templates
+
+Once the templates are created, you can use them just like any other view file, e.g.
+
+```php
+    return View::make("dashboard.sysadmin")
+        ->with('page_title', 'System Administrator Dashboard')
+        ->with('tasks', $tasks);
+```
+
+The underlying Factory class will try to find the view by doing the following steps in
+order until a hit is found:
+
+* Look in the vpages table for a vpage with pagekey = dashboard.sysadmin.
+* Look in the vpages table for a vpage with url = dashboard.sysadmin.
+* Look on disk for a view called resources/views/sysadmin/dashboard.blade.php
+* Look in the vpages table for a vpage with pagekey = errors.410
+* Look in the vpages table for a vpage with pagekey = errors.404
 
 # TODO
 
