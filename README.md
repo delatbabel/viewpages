@@ -13,8 +13,6 @@ The lack of ability to have database backed views, templates, and layouts is one
 missing features that prevents Laravel from being used to create a truly dynamic CMS.  This
 package aims to fix that.
 
-Volunteers to help code this would be welcomed.
-
 TerrePorter partially solves this issue with his StringBladeCompiler package, which is
 used by this package as a dependency.  His package was originally based on Flynsarmy/laravel-db-blade-compiler
 which did support taking a blade from a model object but is no longer maintained.
@@ -72,15 +70,15 @@ few examples based on [AdminLTE](https://almsaeedstudio.com/).
 
 # How to Use This Package
 
-## Creating Templates
+## Creating Views
 
 * Install and run the migrations as per the above.
 * Populate the vpages table with your templates.  They do not have to look any different
   to standard Laravel blade templates -- see the section below on **Blade Compilation**.
 * In addition to the *content* column which should contain the template or page content,
   populate the following columns:
-* **pagekey** -- page or template name.
-* **url** -- URL, may be useful when you want to look up page content by URL.
+* **pagekey** -- page lookup key.
+* **url** -- page lookup URL, may be useful when you want to look up page content by URL.
 * **name** -- a descriptive name of the page, eg "main website home page".
 * **description** -- a longer description of the page.
 
@@ -89,6 +87,35 @@ name used to find the template in the existing Laravel views.  So, for example, 
 normally use View::make("dashboard.sysadmin"); to find the template, you would normally store
 the template in resources/views/dashboard/sysadmin.blade.php.  Instead you would store the
 template in the vpages table with pagekey = "dashboard.sysadmin".
+
+## Creating Templates
+
+You can still use templates (layouts) as you normally would in Laravel.  For example, your
+layout can contain this:
+
+```html
+<html>
+<head><title>{{ $page_title }}</title></head>
+<body>
+@yield('body)
+</body>
+</html>
+```
+
+The body can then contain this:
+
+```html
+@extends('layouts.main')
+
+@section('body)
+<p>Body text goes here</p>
+@endsection
+```
+
+Store the layout view with pagekey = 'layouts.main' and it will automatically be found and extended
+by your body view.
+
+See [Template Inheritance](https://laravel.com/docs/5.1/blade#template-inheritance) for more details.
 
 ## Using Templates
 
@@ -131,6 +158,9 @@ the output of the "functionname" action on the toolbox controller in a HMVC like
 is really no longer supported by Laravel 5 (and Taylor thinks that HMVC is a bad idea, which
 I have to disagree with) so we need some other way of pulling in dynamic content.  This will
 probably be via Repository or Service classes somehow.
+
+[Service Injection](https://laravel.com/docs/5.1/blade#service-injection) may already work, I
+haven't tested it.
 
 ## Website Data Objects and Blocks
 
