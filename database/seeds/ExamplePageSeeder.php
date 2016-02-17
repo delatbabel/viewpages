@@ -28,12 +28,24 @@ class ExamplePageSeeder extends Seeder
         $topdir = $this->getBasePath();
 
         foreach (scandir($topdir) as $dirname) {
-            // Read all of the directories under the top level directory.
+            // Read all of the files and directories under the top level directory.
             if (($dirname == '.') || ($dirname == '..')) {
                 continue;
             }
 
+            // If it's a file, load it directly.
             if (! is_dir($topdir . DIRECTORY_SEPARATOR . $dirname)) {
+                $page_name = str_replace('.blade.php', '', $dirname);
+
+                // Create the page
+                Vpage::create([
+                    'pagekey'           => $page_name,
+                    'url'               => $page_name,
+                    'name'              => $page_name,
+                    'description'       => $page_name . ' page loaded from ' . $dirname,
+                    'content'           => file_get_contents($topdir . DIRECTORY_SEPARATOR .
+                        $dirname),
+                ]);
                 continue;
             }
 

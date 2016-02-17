@@ -5,9 +5,10 @@
 
 namespace Delatbabel\ViewPages\Http\Controllers;
 
-use Delatbabel\ViewPages\Models\Vpage;
 use Illuminate\Http\Request;
 use Wpb\String_Blade_Compiler\StringView;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\View;
 
 /**
  * Class VpageController
@@ -24,6 +25,13 @@ class VpageController extends BaseController
     public function make(Request $request)
     {
         $url = $request->path();
-        return Vpage::make($url, 'url');
+        if ($url == '/') {
+            $url = 'index';
+        }
+
+        # Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+        #     'Make page for URL ' . $url);
+
+        return View::make($url);
     }
 }
