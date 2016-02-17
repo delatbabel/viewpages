@@ -5,8 +5,6 @@ Support view/rendering of Laravel pages and templates from a database.
 Can be used for content management, admin interfaces (e.g. using AdminLTE or other
 front end frameworks), etc.
 
-**UNDER CONSTRUCTION, NOT ENTIRELY STABLE YET**
-
 ## Rationale
 
 The lack of ability to have database backed views, templates, and layouts is one of the
@@ -135,6 +133,31 @@ order until a hit is found:
 * Look on disk for a view called resources/views/sysadmin/dashboard.blade.php
 * Look in the vpages table for a vpage with pagekey = errors.410
 * Look in the vpages table for a vpage with pagekey = errors.404
+
+## CMS Usage
+
+There is an included controller class called VpageController (which you are welcome to
+extend) that can be used as a catch-all route.  This controller contains one function
+called `index()` which simply loads a page from the database using the URL that was
+provided.  This gives you a simple blade based CMS for your application.
+
+To include a route to this controller, include this route specification **after** all of
+the other routes in your routes file(s):
+
+```php
+Route::any('{slug}', [
+    'as'    => 'vpage.make',
+    'uses'  => '\Delatbabel\ViewPages\Http\Controllers\VpageController@make'
+])->where('slug', '.*');
+```
+
+You may need to add additional where clauses on this route to exclude other routes that
+your application consumes.  e.g. to exclude all URLs under "/admin" and "/img" from this catch-all
+route, add the following where clause:
+
+```php
+  ->where('slug', '^(?!admin)(?!img)([A-z\d-\/_.]+)?');
+```
 
 # TODO
 
