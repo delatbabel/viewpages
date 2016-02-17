@@ -22,6 +22,34 @@ use Wpb\String_Blade_Compiler\View;
 class Factory extends BaseFactory
 {
     /**
+     * Determine if a given view exists.
+     *
+     * @param  string  $view
+     * @return bool
+     */
+    public function exists($view)
+    {
+        // If the view has been provided as an array then it must exist.
+        if (is_array($view)) {
+            return true;
+        }
+
+        // Check to see if the page exists in the database
+        $vpage = VPage::where('pagekey', '=', $view)->first();
+        if (! empty($vpage)) {
+            return true;
+        }
+        $vpage = VPage::where('url', '=', $view)->first();
+        if (! empty($vpage)) {
+            return true;
+        }
+
+        // If we have not found it so far then check on the disk by
+        // referring to the parent class.
+        return parent::exists($view);
+    }
+
+    /**
      * Get the evaluated view contents for the given view.
      *
      * This function will try to find the view by doing the following
