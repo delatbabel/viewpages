@@ -165,7 +165,8 @@ route, add the following where clause:
   it into a customised BelongsToMany class.
 * More testing.
 * More documentation.
-* Maybe a set of admin controllers to update / edit content in the database.
+* Maybe a set of admin controllers to update / edit content in the database.  Use an in-browser
+  editor like [HTMLiveCode](https://github.com/matthias-schuetz/HTMLiveCode).
 
 ## Callouts
 
