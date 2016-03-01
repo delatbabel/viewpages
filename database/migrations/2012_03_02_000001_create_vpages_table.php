@@ -34,6 +34,7 @@ class CreateVpagesTable extends Migration
             $table->string('url', 255)->default('')->index();
             $table->string('name', 255)->default('');
             $table->string('description', 255)->nullable();
+            $table->string('pagetype', 20)->default('blade');
             $table->boolean('is_secure')->default(false);
             $table->longText('content')->nullable();
             $table->timestamps();

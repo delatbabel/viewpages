@@ -29,7 +29,7 @@ class Vpage extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['pagekey', 'name', 'url', 'description',
+    protected $fillable = ['pagekey', 'name', 'url', 'description', 'pagetype',
         'is_secure', 'content'];
 
     protected $dates = ['deleted_at'];

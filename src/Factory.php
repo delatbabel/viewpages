@@ -84,6 +84,7 @@ class Factory extends BaseFactory
                 'template'      => $viewModel->content,
                 'cache_key'     => sha1($viewModel->id),
                 'updated_at'    => $viewModel->updated_at->format('U'),
+                'pagetype'      => $viewModel->pagetype,
             ], $data, $mergeData);
         }
 
@@ -96,6 +97,7 @@ class Factory extends BaseFactory
                 'template'      => $viewModel->content,
                 'cache_key'     => sha1($viewModel->id),
                 'updated_at'    => $viewModel->updated_at->format('U'),
+                'pagetype'      => $viewModel->pagetype,
             ], $data, $mergeData);
         }
 
@@ -123,6 +125,7 @@ class Factory extends BaseFactory
                 'template'      => $viewModel->content,
                 'cache_key'     => sha1($viewModel->id),
                 'updated_at'    => $viewModel->updated_at->format('U'),
+                'pagetype'      => $viewModel->pagetype,
             ], $data, $mergeData);
         }
 
@@ -133,6 +136,7 @@ class Factory extends BaseFactory
                 'template'      => $viewModel->content,
                 'cache_key'     => sha1($viewModel->id),
                 'updated_at'    => $viewModel->updated_at->format('U'),
+                'pagetype'      => $viewModel->pagetype,
             ], $data, $mergeData);
         }
 
