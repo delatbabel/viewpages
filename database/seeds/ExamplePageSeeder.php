@@ -22,8 +22,6 @@ class ExamplePageSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('vpages')->delete();
-
         // Sample page directory
         $topdir = $this->getBasePath();
 
@@ -35,13 +33,14 @@ class ExamplePageSeeder extends Seeder
 
             // If it's a file, load it directly.
             if (! is_dir($topdir . DIRECTORY_SEPARATOR . $dirname)) {
-                if (strpos('.blade.php', $dirname)) {
+                if (strpos($dirname, '.blade.php')) {
                     $page_name = str_replace('.blade.php', '', $dirname);
                     $pagetype = 'blade';
-                } elseif (strpos('.twig', $dirname)) {
+                } elseif (strpos($dirname, '.twig')) {
                     $page_name = str_replace('.twig', '', $dirname);
                     $pagetype = 'twig';
                 } else {
+                    echo "No template type for $dirname, skipping\n";
                     continue;
                 }
 
@@ -64,13 +63,14 @@ class ExamplePageSeeder extends Seeder
                     continue;
                 }
 
-                if (strpos('.blade.php', $filename)) {
+                if (strpos($filename, '.blade.php')) {
                     $page_name = str_replace('.blade.php', '', $filename);
                     $pagetype = 'blade';
-                } elseif (strpos('.twig', $filename)) {
+                } elseif (strpos($filename, '.twig')) {
                     $page_name = str_replace('.twig', '', $filename);
                     $pagetype = 'twig';
                 } else {
+                    echo "No template type for $filename, skipping\n";
                     continue;
                 }
 
