@@ -88,19 +88,6 @@ class Factory extends BaseFactory
             ], $data, $mergeData);
         }
 
-        // If we didn't find the view contents by pagekey then look by URL.
-        $viewModel = Vpage::make($view, 'url');
-
-        // Now tell the parent to render the view.
-        if (! empty($viewModel)) {
-            return parent::make([
-                'template'      => $viewModel->content,
-                'cache_key'     => sha1($viewModel->id),
-                'updated_at'    => $viewModel->updated_at->format('U'),
-                'pagetype'      => $viewModel->pagetype,
-            ], $data, $mergeData);
-        }
-
         // If we have no view so far, fall back to an on disk
         // view.
         try {

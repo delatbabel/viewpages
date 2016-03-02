@@ -300,9 +300,11 @@ the actual rendering.
 The service provider here is fairly simple -- however there are 2:
 
 * ViewPagesServiceProvider -- does the normal registration of migrations, seeds, and also calls
-  in ViewServiceProvider.
-* ViewServiceProvider -- extends the Service Provider in String_Blade_Compiler so that my own
+  in StringBladeCompilerServiceProvider.
+* StringBladeCompilerServiceProvider -- extends the Service Provider in String_Blade_Compiler so that my own
   Factory class is inserted when the factory is registered rather than the original.
+* TwigBridgeServiceProvider -- extends the Service Provider in TwigBridge so that the twig chain loader includes
+  a class to load twig templates from the database.
 
 ## Model Class
 

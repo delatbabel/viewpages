@@ -50,7 +50,8 @@ class ViewPagesServiceProvider extends ServiceProvider
         // Register other providers required by this provider, which saves the caller
         // from having to register them each individually.
         App::register(\Delatbabel\SiteConfig\SiteConfigServiceProvider::class);
-        App::register(\Delatbabel\ViewPages\ViewServiceProvider::class);
+        App::register(\Delatbabel\ViewPages\StringBladeCompilerServiceProvider::class);
+        App::register(\Delatbabel\ViewPages\TwigBridgeServiceProvider::class);
     }
 
     /**

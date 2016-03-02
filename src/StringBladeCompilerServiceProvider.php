@@ -1,6 +1,6 @@
 <?php
 /**
- * ViewServiceProvider
+ * StringBladeCompilerServiceProvider
  */
 
 namespace Delatbabel\ViewPages;
@@ -8,7 +8,7 @@ namespace Delatbabel\ViewPages;
 use Wpb\String_Blade_Compiler\ViewServiceProvider as BaseViewServiceProvider;
 
 /**
- * Class ViewServiceProvider
+ * Class StringBladeCompilerServiceProvider
  *
  * Service providers are the central place of all Laravel application bootstrapping.
  * Your own application, as well as all of Laravel's core services are bootstrapped
@@ -16,14 +16,14 @@ use Wpb\String_Blade_Compiler\ViewServiceProvider as BaseViewServiceProvider;
  *
  * ### Functionality
  *
- * This service provider extends the Wpb\String_Blade_Compiler\ViewServiceProvider
+ * This service provider extends the Wpb\String_Blade_Compiler\StringBladeCompilerServiceProvider
  * class to substitute in our own Factory class instead of the original Wpb
  * Factory class.
  *
  * @see  Illuminate\Support\ServiceProvider
  * @link http://laravel.com/docs/5.1/providers
  */
-class ViewServiceProvider extends BaseViewServiceProvider
+class StringBladeCompilerServiceProvider extends BaseViewServiceProvider
 {
     /**
      * Register the factory.
