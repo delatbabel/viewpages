@@ -170,6 +170,8 @@ route, add the following where clause:
 * Need an implementation of the Twig_LoaderInterface to pull Twig templates from the database.
 * Need to extend the TwigBridge service provider.
 
+Useful recipe here: http://twig.sensiolabs.org/doc/recipes.html#using-a-database-to-store-templates
+
 ## Re-implement
 
 The implementation of this could be done better, but it requires a complete rewrite:
@@ -185,7 +187,11 @@ a certain extent this may require somewhat of a re-implementation of the entire 
 the loading stage and the compilation stage can happen separately.
 
 I should take a look to see how OctoberCMS does it but that still requires loading views from the
-disk.
+disk.  Update: in modules/backend/twig, OctoberCMS has a bunch of extensions to the twig/twig classes
+to do loading, etc. They have an implementaton of Twig_LoaderInterface which is still essentially a
+file based loader although it does a few extra Laravely things such as firing events on load, and
+using its own CMS classes to do things like loading files (from disk or from cache if they are
+present) using the Laravel File and Cache facades.  This is not what we want to do at all.
 
 ## Callouts
 
