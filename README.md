@@ -167,6 +167,25 @@ route, add the following where clause:
 * More documentation.
 * Maybe a set of admin controllers to update / edit content in the database.  Use an in-browser
   editor like [HTMLiveCode](https://github.com/matthias-schuetz/HTMLiveCode).
+* Need an implementation of the Twig_LoaderInterface to pull Twig templates from the database.
+* Need to extend the TwigBridge service provider.
+
+## Re-implement
+
+The implementation of this could be done better, but it requires a complete rewrite:
+
+* Provide an implementation of ViewFinderInterface to provide blade views from the database and
+  provide this as the default view finder in place of FileViewFinder.
+* Provide an implementation of CompilerInterface to compile Twig views.  This requires re-implementing
+  the Twig compiler in twig/twig instead of using TwigBridge.
+
+The Laravel View system is somewhat backwards.  The compilers each call the ViewFinders to load the
+files rather than the file loading and the compiling (from string) happening independently.  So to
+a certain extent this may require somewhat of a re-implementation of the entire View system so that
+the loading stage and the compilation stage can happen separately.
+
+I should take a look to see how OctoberCMS does it but that still requires loading views from the
+disk.
 
 ## Callouts
 
