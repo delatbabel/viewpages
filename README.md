@@ -180,14 +180,12 @@ route, add the following where clause:
 
 Useful recipe here: http://twig.sensiolabs.org/doc/recipes.html#using-a-database-to-store-templates
 
-## Re-implement
+## Reimplement
 
 The implementation of this could be done better, but it requires a complete rewrite:
 
 * Provide an implementation of ViewFinderInterface to provide blade views from the database and
   provide this as the default view finder in place of FileViewFinder.
-* Provide an implementation of CompilerInterface to compile Twig views.  This requires re-implementing
-  the Twig compiler in twig/twig instead of using TwigBridge.
 
 The Laravel View system is somewhat backwards.  The compilers each call the ViewFinders to load the
 files rather than the file loading and the compiling (from string) happening independently.  So to
@@ -203,6 +201,25 @@ present) using the Laravel File and Cache facades.  This is not what we want to 
 Another fundamental issue is that a Twig template doesn't compile to plain PHP like a blade template
 does, it compiles to a class that must be loaded and then rendered.  This will require a new loading
 engine that's different to the PhpEngine supplied in the Illuminate/View mechanism.
+
+### Reimplementation Issues / TODO
+
+* Laravel Compiler class includes a Filesystem object
+** The compile() function in BladeCompiler loads the file content using the Filesystem object
+** Need to extend the compile() function to load from the database instead of from Filesystem.
+* Need to provide an alternative implementation of ViewFinder that can be passed to either the
+  View object created in View service provider and also the Twig\Loader in TwigBridge\ServiceProvider
+* The current over-ride of TwigBridge\ServiceProvider should be fine, once that loader is overriden.
+* No need to use the StringBladeCompiler class, then the twigintegration branch on that repo can be discarded.
+* TwigBridge can still be used but it needs to be taught how to load from the database.
+* Need an additional Engine class. The Engine class wraps up the functionality of loading and then
+  compiling and then evaluating the compiled template (with the data).  This all happens in get().
+  Note that this is already done in the Engine in TwigBridge.
+** Evaluating a Twig template needs to be done differently to evaluating a Blade template because the
+   compiled result is not directly executable.
+** In Twig, the compiler is called to load the template ($path) and then rendered (with the $data).
+
+Put all of this on a branch.
 
 ## Callouts
 
