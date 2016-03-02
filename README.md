@@ -187,10 +187,12 @@ The implementation of this could be done better, but it requires a complete rewr
 * Provide an implementation of ViewFinderInterface to provide blade views from the database and
   provide this as the default view finder in place of FileViewFinder.
 
-The Laravel View system is somewhat backwards.  The compilers each call the ViewFinders to load the
-files rather than the file loading and the compiling (from string) happening independently.  So to
-a certain extent this may require somewhat of a re-implementation of the entire View system so that
-the loading stage and the compilation stage can happen separately.
+The Laravel View system is somewhat backwards.  The compilers each call the ViewFinders to find the
+files and then load the files themselves (in the compiler) rather than the file finding, loading and
+compiling (from string) happening independently.  So to a certain extent this may require somewhat
+of a re-implementation of the entire View system so that the loading stage and the compilation stage
+can happen separately.  The only other alternative is to extend the compilers to have a different
+method to load the views instead of pulling in files, which is messy (but will have to do for now).
 
 In modules/backend/twig, OctoberCMS has a bunch of extensions to the twig/twig classes
 to do loading, etc. They have an implementaton of Twig_LoaderInterface which is still essentially a
