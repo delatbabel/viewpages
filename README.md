@@ -205,8 +205,8 @@ engine that's different to the PhpEngine supplied in the Illuminate/View mechani
 ### Reimplementation Issues / TODO
 
 * Laravel Compiler class includes a Filesystem object
-** The compile() function in BladeCompiler loads the file content using the Filesystem object
-** Need to extend the compile() function to load from the database instead of from Filesystem.
+  * The compile() function in BladeCompiler loads the file content using the Filesystem object
+  * Need to extend the compile() function to load from the database instead of from Filesystem.
 * Need to provide an alternative implementation of ViewFinder that can be passed to either the
   View object created in View service provider and also the Twig\Loader in TwigBridge\ServiceProvider
 * The current over-ride of TwigBridge\ServiceProvider should be fine, once that loader is overriden.
@@ -215,9 +215,9 @@ engine that's different to the PhpEngine supplied in the Illuminate/View mechani
 * Need an additional Engine class. The Engine class wraps up the functionality of loading and then
   compiling and then evaluating the compiled template (with the data).  This all happens in get().
   Note that this is already done in the Engine in TwigBridge.
-** Evaluating a Twig template needs to be done differently to evaluating a Blade template because the
-   compiled result is not directly executable.
-** In Twig, the compiler is called to load the template ($path) and then rendered (with the $data).
+  * Evaluating a Twig template needs to be done differently to evaluating a Blade template because the
+  compiled result is not directly executable.
+  * In Twig, the compiler is called to load the template ($path) and then rendered (with the $data).
 
 Put all of this on a branch.
 
