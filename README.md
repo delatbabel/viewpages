@@ -79,6 +79,7 @@ few examples based on [AdminLTE](https://almsaeedstudio.com/).
 * **url** -- page lookup URL, may be useful when you want to look up page content by URL.
 * **name** -- a descriptive name of the page, eg "main website home page".
 * **description** -- a longer description of the page.
+* **pagetype** -- either **blade** or **twig** depending on the view language.
 
 The important thing here is the **pagekey**.  This basically takes the place of the view
 name used to find the view in the existing Laravel View facade.  So, for example, if you would
@@ -114,6 +115,13 @@ Store the template in the vpages table with pagekey = 'layouts.main' and it will
 be found and extended by your body view.
 
 See [Template Inheritance](https://laravel.com/docs/5.1/blade#template-inheritance) for more details.
+
+## Twig Views and Templates
+
+This package now supports views and templates using the [Twig](http://twig.sensiolabs.org/) templating
+language as well as blade templates.
+
+Store these in the database tables alongside your twig templates using pagetype = "twig".
 
 ## Using Templates
 
@@ -186,8 +194,7 @@ files rather than the file loading and the compiling (from string) happening ind
 a certain extent this may require somewhat of a re-implementation of the entire View system so that
 the loading stage and the compilation stage can happen separately.
 
-I should take a look to see how OctoberCMS does it but that still requires loading views from the
-disk.  Update: in modules/backend/twig, OctoberCMS has a bunch of extensions to the twig/twig classes
+In modules/backend/twig, OctoberCMS has a bunch of extensions to the twig/twig classes
 to do loading, etc. They have an implementaton of Twig_LoaderInterface which is still essentially a
 file based loader although it does a few extra Laravely things such as firing events on load, and
 using its own CMS classes to do things like loading files (from disk or from cache if they are
@@ -295,9 +302,13 @@ database is all in the Vpage::make() function.  Once the content of the blade is
 from the database then it's passed back up to String_Blade_Compiler\Factory::make to do
 the actual rendering.
 
+## Twig Compilation
+
+TBD
+
 ## Service Provider
 
-The service provider here is fairly simple -- however there are 2:
+The service provider here is fairly simple -- however there are 3:
 
 * ViewPagesServiceProvider -- does the normal registration of migrations, seeds, and also calls
   in StringBladeCompilerServiceProvider.
@@ -315,3 +326,6 @@ class discussed above can pull templates from the database rather than disk.
 
 * https://github.com/Flynsarmy/laravel-db-blade-compiler
 * https://github.com/TerrePorter/StringBladeCompiler (the 3.0 branch)
+* http://twig.sensiolabs.org/
+* https://github.com/rcrowe/TwigBridge
+* https://github.com/twigphp/Twig
