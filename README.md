@@ -200,6 +200,10 @@ file based loader although it does a few extra Laravely things such as firing ev
 using its own CMS classes to do things like loading files (from disk or from cache if they are
 present) using the Laravel File and Cache facades.  This is not what we want to do at all.
 
+Another fundamental issue is that a Twig template doesn't compile to plain PHP like a blade template
+does, it compiles to a class that must be loaded and then rendered.  This will require a new loading
+engine that's different to the PhpEngine supplied in the Illuminate/View mechanism.
+
 ## Callouts
 
 The original package that this was derived from had the idea of callouts.  This meant that
