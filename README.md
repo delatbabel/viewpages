@@ -186,9 +186,14 @@ The implementation of this could be done better, but it requires a complete rewr
 
 * Fix the Factory class.
   * How does the factory know which engine to hand the data to?  Based on a file extension that a database
-    object does not have?
+    object does not have?  Either need to add the extension in VpageViewFinder::find or need to be able to
+    discover it some other way in the Factory class.
+  * If we add the extension in VpageViewFinder::find() then we need to trim it off in VpageLoader or
+    in Vpage::make().
 * No need to use the StringBladeCompiler class, then the twigintegration branch on that repo can be discarded.
-* Do I need to fix the TwigEngine's finder so that it doesn't find Blade views, and vice-versa?
+* Fix the TwigEngine's finder so that it doesn't find Blade views, and vice-versa?
+* Add a lastModified() function to the loaders.
+* Fix the isExpired() function in BladeCompiler.
 
 Put all of this on a branch.
 
@@ -350,17 +355,39 @@ in the blade template file -- normally in the template file @extends would be at
 
 ### Use of $__env
 
-The global variable $__env is actually an instance of Illuminate\View\Factory, or in the
-String_Blade_Compiler extension it is an instance of Wpb\String_Blade_Compiler\Factory.
+The global variable $__env is actually an instance of Illuminate\View\Factory.
 
 That class implements the necessary make(), startSection(), stopSection() and yieldContent()
 functions, which make the content appear in the correct place.
 
-The critical function is make() which has been extended so that it is able to pull the
+The critical function is make() which does this:
+
+* Normalize the view name by replacing '.' with '/'
+* Calls the finder to find the view.
+* Prepares the data array.
+* Discovers the engine to be used from the path.
+* Creates the View object
+
+The problem with the base Factory class is that it assumes that the view name is a file
+name that has an extension, and the "php" or "blade.php" or "twig" extensions can be
+identified to determine the view type.  Instead I store the view type in the database
+table.
+
+The finder and loader have been extended so that they are able to pull the
 view from the database instead of from disk.  The logic of pulling the view from the
-database is all in the Vpage::make() function.  Once the content of the blade is pulled
-from the database then it's passed back up to String_Blade_Compiler\Factory::make to do
-the actual rendering.
+database is all in the Vpage::make() function.
+
+Once the content of the blade is pulled from the database and the engine is resolved
+then the view factory and the engine are then passed by Factory::make to the view.
+
+View::render() does the actual rendering by:
+
+* calling View::renderContents()
+* which calls View::getContents()
+* which passes the full view path and the data to the Engine::get()
+* Engine::get() calls Compiler::compile() if the view is expired
+* then Compiler::getCompiledPath() which returns the path of the compiled view
+* then Engine::evaluatePath() which passes the data to the compiled view
 
 ## Service Provider
 
