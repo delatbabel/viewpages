@@ -174,6 +174,7 @@ route, add the following where clause:
 * More documentation.
 * Maybe a set of admin controllers to update / edit content in the database.  Use an in-browser
   editor like [HTMLiveCode](https://github.com/matthias-schuetz/HTMLiveCode).
+* Have a longer look at the Engine classes to make sure I don't need to do anything else there.
 
 Useful recipe here: http://twig.sensiolabs.org/doc/recipes.html#using-a-database-to-store-templates
 
@@ -221,12 +222,14 @@ I worked with a CMS system based on Laravel 3 that was fairly poor in its implem
 this package is designed to be a best practice implementation of what the Laravel 3 CMS
 was supposed to be.
 
-## Loading Views During Compilation
+## Loading Blade Views During Compilation
 
 The Laravel View system is somewhat backwards.  The compilers each call the ViewFinders to find the
 files and then load the files themselves (in the compiler) rather than the file finding, loading and
 compiling (from string) happening independently.  So this required somewhat of a re-implementation
 of the entire View system so that the loading stage and the compilation stage can happen separately.
+
+### Finding
 
 This was done by:
 
@@ -234,6 +237,8 @@ This was done by:
 * Adding a ChainViewFinder class which chained together the VpageViewFinder and the existing
   Laravel FileViewFinder class (left untouched) to first pick the view from the database and
   then fall back to the file system if it was not found there.
+
+### Loading
 
 Extending the compiler to include a loading stage was done by:
 
@@ -357,18 +362,14 @@ database is all in the Vpage::make() function.  Once the content of the blade is
 from the database then it's passed back up to String_Blade_Compiler\Factory::make to do
 the actual rendering.
 
-## Twig Compilation
-
-TBD
-
 ## Service Provider
 
 The service provider here is fairly simple -- however there are 3:
 
 * ViewPagesServiceProvider -- does the normal registration of migrations, seeds, and also calls
   in StringBladeCompilerServiceProvider.
-* StringBladeCompilerServiceProvider -- extends the Service Provider in String_Blade_Compiler so that my own
-  Factory class is inserted when the factory is registered rather than the original.
+* IlluminateViewServiceProvider -- extends the base Laravel View Service Provider to include the
+  necessary additional finder and loader classes.
 * TwigBridgeServiceProvider -- extends the Service Provider in TwigBridge so that the twig chain loader includes
   a class to load twig templates from the database.
 
