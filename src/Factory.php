@@ -5,10 +5,9 @@
 
 namespace Delatbabel\ViewPages;
 
-use Wpb\String_Blade_Compiler\StringView;
-use Wpb\String_Blade_Compiler\Factory as BaseFactory;
 use Delatbabel\ViewPages\Models\Vpage;
-use Wpb\String_Blade_Compiler\View;
+use Illuminate\View\Factory as BaseFactory;
+use Illuminate\View\View;
 
 /**
  * Class Factory
@@ -21,34 +20,6 @@ use Wpb\String_Blade_Compiler\View;
  */
 class Factory extends BaseFactory
 {
-    /**
-     * Determine if a given view exists.
-     *
-     * @param  string  $view
-     * @return bool
-     */
-    public function exists($view)
-    {
-        // If the view has been provided as an array then it must exist.
-        if (is_array($view)) {
-            return true;
-        }
-
-        // Check to see if the page exists in the database
-        $vpage = VPage::where('pagekey', '=', $view)->first();
-        if (! empty($vpage)) {
-            return true;
-        }
-        $vpage = VPage::where('url', '=', $view)->first();
-        if (! empty($vpage)) {
-            return true;
-        }
-
-        // If we have not found it so far then check on the disk by
-        // referring to the parent class.
-        return parent::exists($view);
-    }
-
     /**
      * Get the evaluated view contents for the given view.
      *
@@ -64,7 +35,7 @@ class Factory extends BaseFactory
      * @param  array|string  $view
      * @param  array   $data
      * @param  array   $mergeData
-     * @return StringView
+     * @return View
      */
     public function make($view, $data = [], $mergeData = [])
     {

@@ -57,8 +57,7 @@ Replace it with this line:
 Finally, incorporate and run the migration scripts to create the database tables as follows:
 
 ```php
-    php artisan vendor:publish --tag=migrations --force
-    php artisan vendor:publish --tag=seeds --force
+    php artisan vendor:publish --provider='Delatbabel\ViewPages\ViewPagesServiceProvider' --force
     php artisan migrate
 ```
 
@@ -87,7 +86,7 @@ normally use View::make("dashboard.sysadmin"); to find the view, you would norma
 the view on disk in resources/views/dashboard/sysadmin.blade.php.  Instead you would store the
 view in the vpages table with pagekey = "dashboard.sysadmin".
 
-## Creating Templates
+## Creating Blade Templates
 
 You can still use templates (layouts) as you normally would in Laravel.  For example, your
 template can contain this:
@@ -175,8 +174,6 @@ route, add the following where clause:
 * More documentation.
 * Maybe a set of admin controllers to update / edit content in the database.  Use an in-browser
   editor like [HTMLiveCode](https://github.com/matthias-schuetz/HTMLiveCode).
-* Need an implementation of the Twig_LoaderInterface to pull Twig templates from the database.
-* Need to extend the TwigBridge service provider.
 
 Useful recipe here: http://twig.sensiolabs.org/doc/recipes.html#using-a-database-to-store-templates
 
@@ -184,42 +181,13 @@ Useful recipe here: http://twig.sensiolabs.org/doc/recipes.html#using-a-database
 
 The implementation of this could be done better, but it requires a complete rewrite:
 
-* Provide an implementation of ViewFinderInterface to provide blade views from the database and
-  provide this as the default view finder in place of FileViewFinder.
-
-The Laravel View system is somewhat backwards.  The compilers each call the ViewFinders to find the
-files and then load the files themselves (in the compiler) rather than the file finding, loading and
-compiling (from string) happening independently.  So to a certain extent this may require somewhat
-of a re-implementation of the entire View system so that the loading stage and the compilation stage
-can happen separately.  The only other alternative is to extend the compilers to have a different
-method to load the views instead of pulling in files, which is messy (but will have to do for now).
-
-In modules/backend/twig, OctoberCMS has a bunch of extensions to the twig/twig classes
-to do loading, etc. They have an implementaton of Twig_LoaderInterface which is still essentially a
-file based loader although it does a few extra Laravely things such as firing events on load, and
-using its own CMS classes to do things like loading files (from disk or from cache if they are
-present) using the Laravel File and Cache facades.  This is not what we want to do at all.
-
-Another fundamental issue is that a Twig template doesn't compile to plain PHP like a blade template
-does, it compiles to a class that must be loaded and then rendered.  This will require a new loading
-engine that's different to the PhpEngine supplied in the Illuminate/View mechanism.
-
 ### Reimplementation Issues / TODO
 
-* Laravel Compiler class includes a Filesystem object
-  * The compile() function in BladeCompiler loads the file content using the Filesystem object
-  * Need to extend the compile() function to load from the database instead of from Filesystem.
-* Need to provide an alternative implementation of ViewFinder that can be passed to either the
-  View object created in View service provider and also the Twig\Loader in TwigBridge\ServiceProvider
-* The current over-ride of TwigBridge\ServiceProvider should be fine, once that loader is overriden.
+* Fix the Factory class.
+  * How does the factory know which engine to hand the data to?  Based on a file extension that a database
+    object does not have?
 * No need to use the StringBladeCompiler class, then the twigintegration branch on that repo can be discarded.
-* TwigBridge can still be used but it needs to be taught how to load from the database.
-* Need an additional Engine class. The Engine class wraps up the functionality of loading and then
-  compiling and then evaluating the compiled template (with the data).  This all happens in get().
-  Note that this is already done in the Engine in TwigBridge.
-  * Evaluating a Twig template needs to be done differently to evaluating a Blade template because the
-  compiled result is not directly executable.
-  * In Twig, the compiler is called to load the template ($path) and then rendered (with the $data).
+* Do I need to fix the TwigEngine's finder so that it doesn't find Blade views, and vice-versa?
 
 Put all of this on a branch.
 
@@ -253,9 +221,73 @@ I worked with a CMS system based on Laravel 3 that was fairly poor in its implem
 this package is designed to be a best practice implementation of what the Laravel 3 CMS
 was supposed to be.
 
-## Handling Directives
+## Loading Views During Compilation
 
-I have extended the Factory class within String_Blade_Compiler class to be able to have
+The Laravel View system is somewhat backwards.  The compilers each call the ViewFinders to find the
+files and then load the files themselves (in the compiler) rather than the file finding, loading and
+compiling (from string) happening independently.  So this required somewhat of a re-implementation
+of the entire View system so that the loading stage and the compilation stage can happen separately.
+
+This was done by:
+
+* Adding a VpageViewFinder class which can determine whether a view is found in the database.
+* Adding a ChainViewFinder class which chained together the VpageViewFinder and the existing
+  Laravel FileViewFinder class (left untouched) to first pick the view from the database and
+  then fall back to the file system if it was not found there.
+
+Extending the compiler to include a loading stage was done by:
+
+* Creating a new LoaderInterface which defined the interface to a loader.  The only function
+  that a loader needs is a get() function, to take the view name found by the finder and
+  load it as a string.
+* Creating new FilesystemLoader and VpageLoader classes which can take the view name and load
+  it from the file system or database respectively.
+* Creating a ChainLoader class which can chain together the VpageLoader and the FilesystemLoader
+  objects to load the view from wherever it happens to be found.
+
+The final step was to extend the native Laravel BladeCompiler class to load the view contents
+using one of the loaders (initialised as the ChainLoader) instead of using its own internal
+Filesystem object to load the view contents.  Compilation then happens as normal using the
+compileString() function.
+
+## Loading Twig Views
+
+### Finding
+
+The ChainViewFinder class is also able to be used by the Twig loader created in the TwigBridge
+service provider, so that the twig loader's ViewFinder can use the same approach to finding
+views that the Blade loader uses.
+
+### Loading
+
+Twig (via TwigBridge) already has the concept of a separate finder and loader class, however the
+loader has to follow Twig's Twig_LoaderInterface.  To achieve this I built a VpageTwigLoader class
+to conform to the interface.
+
+I over-rode the TwigBridge ServiceProvider class to provide a VpageTwigLoader object in the
+Twig_Loader_Chain that is used to load twig data.
+
+### Other Implementations
+
+In modules/backend/twig, OctoberCMS has a bunch of extensions to the twig/twig classes
+to do loading, etc. They have an implementaton of Twig_LoaderInterface which is still essentially a
+file based loader although it does a few extra Laravely things such as firing events on load, and
+using its own CMS classes to do things like loading files (from disk or from cache if they are
+present) using the Laravel File and Cache facades.  This was not what I wanted to do at all.
+
+## Engines
+
+The Engine class wraps up the functionality of loading and then compiling and then evaluating
+the compiled template (with the data).  This all happens in get().
+
+Evaluating a Twig template needs to be done differently to evaluating a Blade template because the
+compiled result is not directly executable.
+
+Note that this is already done in the Engine in TwigBridge.
+
+## Handling Blade Directives
+
+I have extended the native Laravel Illuminate\View\Factory class to be able to have
 @include refer to a page or template key instead of a file name.  See **Blade Compilation**
 below.
 

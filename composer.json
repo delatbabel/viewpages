@@ -11,19 +11,13 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "wpb/string-blade-compiler": "3.0.x-dev",
         "delatbabel/applog": "~1.0",
         "delatbabel/fluents": "~1.0",
         "delatbabel/site-config": "~1.0",
         "illuminate/support": "5.1.*",
-        "illuminate/view": "5.1.*"
+        "illuminate/view": "5.1.*",
+        "rcrowe/twigbridge": "^0.9.2"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:delatbabel/StringBladeCompiler.git"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Delatbabel\\ViewPages\\": "src/"

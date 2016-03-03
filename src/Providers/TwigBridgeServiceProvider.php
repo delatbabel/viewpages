@@ -5,7 +5,7 @@
  * @author del
  */
 
-namespace Delatbabel\ViewPages;
+namespace Delatbabel\ViewPages\Providers;
 
 use Delatbabel\ViewPages\Loaders\VpageTwigLoader;
 use TwigBridge\ServiceProvider as BaseServiceProvider;
@@ -40,12 +40,14 @@ class TwigBridgeServiceProvider extends BaseServiceProvider
         $this->app->bindIf('twig.loader.viewfinder', function () {
             return new Loader(
                 $this->app['files'],
+                // app['view']->getFinder() comes from Factory which is created in the
+                // IlluminateViewServiceProvider class.
                 $this->app['view']->getFinder(),
                 $this->app['twig.extension']
             );
         });
 
-        $this->app->bindIf('twig.loader.vpage', function() {
+        $this->app->bindIf('twig.loader.vpage', function () {
             return new VpageTwigLoader();
         });
 
@@ -62,3 +64,38 @@ class TwigBridgeServiceProvider extends BaseServiceProvider
         );
     }
 }
+
+/*
+ * Original function, just for comparison
+ *
+protected function registerLoaders()
+{
+    // The array used in the ArrayLoader
+    $this->app->bindIf('twig.templates', function () {
+        return [];
+    });
+
+    $this->app->bindIf('twig.loader.array', function ($app) {
+        return new Twig_Loader_Array($app['twig.templates']);
+    });
+
+    $this->app->bindIf('twig.loader.viewfinder', function () {
+        return new Twig\Loader(
+            $this->app['files'],
+            $this->app['view']->getFinder(),
+            $this->app['twig.extension']
+        );
+    });
+
+    $this->app->bindIf(
+        'twig.loader',
+        function () {
+            return new Twig_Loader_Chain([
+                $this->app['twig.loader.array'],
+                $this->app['twig.loader.viewfinder'],
+            ]);
+        },
+        true
+    );
+}
+*/
