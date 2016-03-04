@@ -1,9 +1,18 @@
-# viewpages
+# ViewPages
 
 Support view/rendering of Laravel pages and templates from a database.
 
 Can be used for content management, admin interfaces (e.g. using AdminLTE or other
 front end frameworks), etc.
+
+Supports loading both Blade and Twig templates using the same interface as existing
+view loading, for example:
+
+```php
+    return View::make("dashboard.sysadmin")
+        ->with('page_title', 'System Administrator Dashboard')
+        ->with('tasks', $tasks);
+```
 
 ## Rationale
 
@@ -11,9 +20,9 @@ The lack of ability to have database backed views, templates, and layouts is one
 missing features that prevents Laravel from being used to create a truly dynamic CMS.  This
 package aims to fix that.
 
-TerrePorter partially solves this issue with his StringBladeCompiler package, which is
-used by this package as a dependency.  His package was originally based on Flynsarmy/laravel-db-blade-compiler
-which did support taking a blade from a model object but is no longer maintained.
+TerrePorter partially solves this issue with his StringBladeCompiler package.  His package
+was originally based on Flynsarmy/laravel-db-blade-compiler which did support taking a blade
+from a model object but is no longer maintained.
 
 # Installation
 
@@ -56,7 +65,7 @@ Replace it with this line:
 
 Finally, incorporate and run the migration scripts to create the database tables as follows:
 
-```php
+```
     php artisan vendor:publish --provider='Delatbabel\ViewPages\ViewPagesServiceProvider' --force
     php artisan migrate
 ```
@@ -138,8 +147,13 @@ order until a hit is found:
 * Look in the vpages table for a vpage with pagekey = dashboard.sysadmin.
 * Look in the vpages table for a vpage with url = dashboard.sysadmin.
 * Look on disk for a view called resources/views/sysadmin/dashboard.blade.php
+* Look on disk for a view called resources/views/sysadmin/dashboard.twig
 * Look in the vpages table for a vpage with pagekey = errors.410
+* Look on disk for a view called resources/views/errors/410.blade.php
+* Look on disk for a view called resources/views/errors/410.twig
 * Look in the vpages table for a vpage with pagekey = errors.404
+* Look on disk for a view called resources/views/errors/404.blade.php
+* Look on disk for a view called resources/views/errors/404.twig
 
 ## CMS Usage
 
@@ -174,13 +188,10 @@ route, add the following where clause:
 * More documentation.
 * Maybe a set of admin controllers to update / edit content in the database.  Use an in-browser
   editor like [HTMLiveCode](https://github.com/matthias-schuetz/HTMLiveCode).
-* Have a longer look at the Engine classes to make sure I don't need to do anything else there.
 * Fix the TwigEngine's finder so that it doesn't find Blade views, and vice-versa.  There is
   also a related TODO in `Vpage::make()` to restrict the view type pulled from the database.
 * Add a lastModified() function to the loaders.
 * Fix the isExpired() function in BladeCompiler.
-
-Useful recipe here: http://twig.sensiolabs.org/doc/recipes.html#using-a-database-to-store-templates
 
 ## Callouts
 
@@ -437,3 +448,4 @@ class discussed above can pull templates from the database rather than disk.
 * http://twig.sensiolabs.org/
 * https://github.com/rcrowe/TwigBridge
 * https://github.com/twigphp/Twig
+* http://twig.sensiolabs.org/doc/recipes.html#using-a-database-to-store-templates
