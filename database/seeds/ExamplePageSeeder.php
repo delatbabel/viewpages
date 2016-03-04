@@ -35,7 +35,7 @@ class ExamplePageSeeder extends Seeder
             if (! is_dir($topdir . DIRECTORY_SEPARATOR . $dirname)) {
                 if (strpos($dirname, '.blade.php')) {
                     $page_name = str_replace('.blade.php', '', $dirname);
-                    $pagetype = 'blade';
+                    $pagetype = 'blade.php';
                 } elseif (strpos($dirname, '.twig')) {
                     $page_name = str_replace('.twig', '', $dirname);
                     $pagetype = 'twig';
@@ -65,7 +65,7 @@ class ExamplePageSeeder extends Seeder
 
                 if (strpos($filename, '.blade.php')) {
                     $page_name = str_replace('.blade.php', '', $filename);
-                    $pagetype = 'blade';
+                    $pagetype = 'blade.php';
                 } elseif (strpos($filename, '.twig')) {
                     $page_name = str_replace('.twig', '', $filename);
                     $pagetype = 'twig';

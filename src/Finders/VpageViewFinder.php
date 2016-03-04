@@ -30,13 +30,9 @@ class VpageViewFinder implements ViewFinderInterface
     public function find($view)
     {
         // Check to see if the page exists in the database
-        $vpage = Vpage::where('pagekey', '=', $view)->first();
+        $vpage = Vpage::make($view);
         if (! empty($vpage)) {
-            return $view;
-        }
-        $vpage = Vpage::where('url', '=', $view)->first();
-        if (! empty($vpage)) {
-            return $view;
+            return $view . Vpage::EXTENSION_SEPARATOR . $vpage->pagetype;
         }
 
         throw new InvalidArgumentException("View [$view] not found in vpage table.");

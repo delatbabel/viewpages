@@ -34,6 +34,9 @@ class Vpage extends Model
 
     protected $dates = ['deleted_at'];
 
+    /** Used to separate the page name from the page type */
+    const EXTENSION_SEPARATOR = '||';
+
     /**
      * Many:Many relationship with Website model
      *
@@ -73,6 +76,23 @@ class Vpage extends Model
      */
     public static function fetch($url = 'index', $field = 'pagekey')
     {
+        // Sanitise the URL
+        $url = filter_var($url, FILTER_SANITIZE_STRING);
+
+        if (empty($url)) {
+            // An empty URL indicates that the home page is being fetched.
+            $url = 'index';
+        }
+
+        // Determine whether there is an extension separator on the page
+        // key or not, and strip it off if there is one present.
+        $url_parts = explode(static::EXTENSION_SEPARATOR, $url, 2);
+        $url = $url_parts[0];
+
+        // TODO: The extension for the pagetype is in $url_parts[1] if it
+        // is not empty. This could be "blade.php", "php" or "twig".  Restrict
+        // the query to pages where the pagetype matches the extension.
+
         // Find the current website ID
         $website_id = Website::currentWebsiteId();
 
@@ -139,13 +159,6 @@ class Vpage extends Model
      */
     public static function make($url = 'index')
     {
-        $url = filter_var($url, FILTER_SANITIZE_STRING);
-
-        if (empty($url)) {
-            // An empty URL indicates that the home page is being fetched.
-            $url = 'index';
-        }
-
         // Find by pagekey first
         $page = static::fetch($url, 'pagekey');
 

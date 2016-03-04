@@ -175,27 +175,12 @@ route, add the following where clause:
 * Maybe a set of admin controllers to update / edit content in the database.  Use an in-browser
   editor like [HTMLiveCode](https://github.com/matthias-schuetz/HTMLiveCode).
 * Have a longer look at the Engine classes to make sure I don't need to do anything else there.
-
-Useful recipe here: http://twig.sensiolabs.org/doc/recipes.html#using-a-database-to-store-templates
-
-## Reimplement
-
-The implementation of this could be done better, but it requires a complete rewrite:
-
-### Reimplementation Issues / TODO
-
-* Fix the Factory class.
-  * How does the factory know which engine to hand the data to?  Based on a file extension that a database
-    object does not have?  Either need to add the extension in VpageViewFinder::find or need to be able to
-    discover it some other way in the Factory class.
-  * If we add the extension in VpageViewFinder::find() then we need to trim it off in VpageLoader or
-    in Vpage::make().
-* No need to use the StringBladeCompiler class, then the twigintegration branch on that repo can be discarded.
-* Fix the TwigEngine's finder so that it doesn't find Blade views, and vice-versa?
+* Fix the TwigEngine's finder so that it doesn't find Blade views, and vice-versa.  There is
+  also a related TODO in `Vpage::make()` to restrict the view type pulled from the database.
 * Add a lastModified() function to the loaders.
 * Fix the isExpired() function in BladeCompiler.
 
-Put all of this on a branch.
+Useful recipe here: http://twig.sensiolabs.org/doc/recipes.html#using-a-database-to-store-templates
 
 ## Callouts
 
@@ -227,6 +212,48 @@ I worked with a CMS system based on Laravel 3 that was fairly poor in its implem
 this package is designed to be a best practice implementation of what the Laravel 3 CMS
 was supposed to be.
 
+## Factory
+
+The root of the View system is the `Factory` class.  This is accessed by the `View` facade,
+and a `view` singleton which is registered in the application.
+
+The only addition that I made to the factory class was to automatically load the errors.410
+view or then the errors.404 view if the requested view is not found.  This is mostly of use
+in CMS applications where views may be searched for by URL path, and a user may enter a garbage
+URL so we want to put up a 404 page and not just an unhandled exception block.
+
+## Extensions and Engine Resolving
+
+The `Factory` class contains an internal array called `$extensions` which is a mapping from a
+file extension (specifically a view path extension) to an engine identifier.  By default
+the array looks like this:
+
+```php
+    protected $extensions = ['blade.php' => 'blade', 'php' => 'php'];
+```
+
+So the "blade.php" extension maps to the "blade" engine ID.
+
+Additional engine extensions can be added to this `$extensions` array by calling `Factory::addExtension()`.
+Note that this is already done by the TwigBridge service provider
+
+The engine ID is passed to a resolver (`EngineResolver`) which contains a mapping from the engine
+ID to the engine itself.  These mappings are created in the `EngineResolver::resolve()` function.
+
+So each time we return a blade template path from the database it needs to have a ".blade.php"
+extension added to the template name so that the engine resolver can find the correct engine to
+compile and load the blade.
+
+## Engines
+
+The Engine class wraps up the functionality of loading and then compiling and then evaluating
+the compiled template (with the data).  This all happens in get().
+
+Evaluating a Twig template needs to be done differently to evaluating a Blade template because the
+compiled result is not directly executable.
+
+Note that this is already done in the Engine in `TwigBridge`.
+
 ## Loading Blade Views During Compilation
 
 The Laravel View system is somewhat backwards.  The compilers each call the ViewFinders to find the
@@ -238,27 +265,35 @@ of the entire View system so that the loading stage and the compilation stage ca
 
 This was done by:
 
-* Adding a VpageViewFinder class which can determine whether a view is found in the database.
-* Adding a ChainViewFinder class which chained together the VpageViewFinder and the existing
+* Adding a `VpageViewFinder` class which can determine whether a view is found in the database.
+* Adding a `ChainViewFinder` class which chained together the VpageViewFinder and the existing
   Laravel FileViewFinder class (left untouched) to first pick the view from the database and
   then fall back to the file system if it was not found there.
+
+`EngineResolver` needs to have the extension added to the view name in order to be able to determine
+the correct engine to hand the view to, so the `VpageViewFinder` adds the file extension to the view name.
+The `Vpage` class which loads pages from the database can strip off this file extension before loading
+the page in the `make()` function.
+
+Note that the extension doesn't have to be prefixed with ".", it can have any prefix.  The `Vpage`
+class defines the prefix to use as a constant.
 
 ### Loading
 
 Extending the compiler to include a loading stage was done by:
 
-* Creating a new LoaderInterface which defined the interface to a loader.  The only function
+* Creating a new `LoaderInterface` which defined the interface to a loader.  The only function
   that a loader needs is a get() function, to take the view name found by the finder and
   load it as a string.
-* Creating new FilesystemLoader and VpageLoader classes which can take the view name and load
+* Creating new `FilesystemLoader` and `VpageLoader` classes which can take the view name and load
   it from the file system or database respectively.
-* Creating a ChainLoader class which can chain together the VpageLoader and the FilesystemLoader
+* Creating a `ChainLoader` class which can chain together the `VpageLoader` and the `FilesystemLoader`
   objects to load the view from wherever it happens to be found.
 
-The final step was to extend the native Laravel BladeCompiler class to load the view contents
-using one of the loaders (initialised as the ChainLoader) instead of using its own internal
-Filesystem object to load the view contents.  Compilation then happens as normal using the
-compileString() function.
+The final step was to extend the native Laravel `BladeCompiler` class to load the view contents
+using one of the loaders (initialised as the `ChainLoader`) instead of using its own internal
+`Filesystem` object to load the view contents.  Compilation then happens as normal using the
+`compileString()` function.
 
 ## Loading Twig Views
 
@@ -284,16 +319,6 @@ to do loading, etc. They have an implementaton of Twig_LoaderInterface which is 
 file based loader although it does a few extra Laravely things such as firing events on load, and
 using its own CMS classes to do things like loading files (from disk or from cache if they are
 present) using the Laravel File and Cache facades.  This was not what I wanted to do at all.
-
-## Engines
-
-The Engine class wraps up the functionality of loading and then compiling and then evaluating
-the compiled template (with the data).  This all happens in get().
-
-Evaluating a Twig template needs to be done differently to evaluating a Blade template because the
-compiled result is not directly executable.
-
-Note that this is already done in the Engine in TwigBridge.
 
 ## Handling Blade Directives
 

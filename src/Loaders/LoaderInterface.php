@@ -29,5 +29,5 @@ interface LoaderInterface
      * @param string $name   view name.
      * @return string
      */
-    function get($name);
+    public function get($name);
 }
