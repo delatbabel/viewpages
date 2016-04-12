@@ -10,7 +10,7 @@ APPNAME='ViewPages'
 CMDFILE=apigen.cmd.$$
 DESTDIR=./documents
 SRCDIRS="src"
-VENDORDIRS="vendor/delatbabel vendor/wpb vendor/laravel vendor/monolog"
+VENDORDIRS="vendor/delatbabel vendor/laravel vendor/monolog"
 
 #
 # Ensure that dependencies are installed (including codeception and phpunit)
