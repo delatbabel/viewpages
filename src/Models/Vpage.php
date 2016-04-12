@@ -159,8 +159,10 @@ class Vpage extends Model
      */
     public static function make($url = 'index')
     {
-        // Find by pagekey first
-        $page = static::fetch($url, 'pagekey');
+        // Find by pagekey first.  Convert any '/' characters injected
+        // into the search back to '.' characters.
+        $pagekey = strtr($url, '/', '.');
+        $page = static::fetch($pagekey, 'pagekey');
 
         // Then find by URL if pagekey is not found
         if (empty($page)) {

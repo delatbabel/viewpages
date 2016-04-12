@@ -131,6 +131,24 @@ be found and extended by your body view.
 
 See [Template Inheritance](https://laravel.com/docs/5.1/blade#template-inheritance) for more details.
 
+### Variant Content
+
+These are website dependent data blocks, stored in the vobjects table and retrieved using the
+VojbecService service which can be injected into a page using
+[Laravel Service Injection](https://laravel.com/docs/5.1/blade#service-injection).
+
+Example:
+
+```html
+@inject('objects', 'Delatbabel\ViewPages\Services\VobjectService')
+
+<!-- Using the regular make method -->
+<title> {{ $objects->make('page_title') }} </title>
+
+<!-- Using a magic getter -->
+<title> {{ $objects->page_title }} </title>
+```
+
 ## Twig Views and Templates
 
 This package now supports views and templates using the [Twig](http://twig.sensiolabs.org/) templating
@@ -202,8 +220,6 @@ route, add the following where clause:
   also a related TODO in `Vpage::make()` to restrict the view type pulled from the database.
 * Add a lastModified() function to the loaders.
 * Fix the isExpired() function in BladeCompiler.
-* I think that when searching for the blade name by `pagekey` we may need to convert "/" characters
-  back to "." characters.
 * Maybe support other template engines such as Smarty.  In particular I would prefer a template
   engine that does not compile to PHP code and instead compiles to an in-memory string.
 
@@ -224,12 +240,6 @@ probably be via Repository or Service classes somehow.
 
 [Service Injection](https://laravel.com/docs/5.1/blade#service-injection) may already work, I
 haven't tested it.
-
-## Website Data Objects and Blocks
-
-These are website dependent data blocks.  It may be preferable to store website dependent
-data including renderable data blocks in the configs table, which is of course what it was
-designed for.
 
 # Architecture
 
