@@ -7,10 +7,8 @@
 
 namespace Delatbabel\ViewPages\Services;
 
-use Delatbabel\SiteConfig\Models\Website;
 use Delatbabel\ViewPages\Models\Vobject;
-use Illuminate\Support\Facades\Cache;
-
+use Illuminate\Support\Str;
 
 /**
  * Class VobjectService
@@ -41,6 +39,8 @@ class VobjectService
      */
     public function make($objectkey)
     {
+        $objectkey    = Str::slug($objectkey);
+
         $vobject = Vobject::make($objectkey);
 
         // Return null if the object is not found
