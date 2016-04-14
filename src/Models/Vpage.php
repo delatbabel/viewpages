@@ -4,10 +4,13 @@
  */
 namespace Delatbabel\ViewPages\Models;
 
+use Delatbabel\Fluents\Fluents;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Delatbabel\SiteConfig\Models\Website;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Fluent;
 
 /**
  * Class Vpage
@@ -27,7 +30,7 @@ use Illuminate\Support\Facades\Log;
  */
 class Vpage extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Fluents;
 
     protected $fillable = ['pagekey', 'name', 'url', 'description', 'pagetype',
         'is_secure', 'content'];
@@ -72,7 +75,7 @@ class Vpage extends Model
      *
      * @param string $url
      * @param string $field 'pagekey' or 'url'
-     * @return Vpage
+     * @return Fluent|null
      */
     public static function fetch($url = 'index', $field = 'pagekey')
     {
@@ -96,6 +99,14 @@ class Vpage extends Model
         // Find the current website ID
         $website_id = Website::currentWebsiteId();
 
+        // We seem to do a lot of page fetching twice here, often to
+        // get the page type, then to get the content and also the updated_at
+        // time.  Cache the results after one fetch.
+        $cache_key = 'vpage__' . $website_id . '__' . $url;
+        if (Cache::has($cache_key)) {
+            return Cache::get($cache_key);
+        }
+
         // Try to find a page that is joined to the current website
         /** @var Vpage $page */
         $page = static::where($field, '=', $url)
@@ -109,7 +120,9 @@ class Vpage extends Model
         if (! empty($page)) {
             #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
             #    'Found vpage on first look,  ID == ' . $page->id);
-            return $page;
+            $fluent = $page->toFluent();
+            Cache::put($cache_key, $fluent, 60);
+            return $fluent;
         }
 
         // If there is no such page, try to find a page that is not joined
@@ -123,9 +136,15 @@ class Vpage extends Model
                 'vpages.updated_at AS updated_at',
                 'vpages.pagetype AS pagetype')
             ->first();
+        if (empty($page)) {
+            return null;
+        }
+
         #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
         #    'Found vpage on second look,  ID == ' . $page->id);
-        return $page;
+        $fluent = $page->toFluent();
+        Cache::put($cache_key, $fluent, 60);
+        return $fluent;
     }
 
     /**

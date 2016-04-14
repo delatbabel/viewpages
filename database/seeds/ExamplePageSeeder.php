@@ -32,13 +32,17 @@ class ExamplePageSeeder extends Seeder
             }
 
             // If it's a file, load it directly.
+            // As of Laravel v5.1.32 someone made a change:
+            // https://github.com/laravel/framework/commit/70e504da5ad395d87467826e528dc9edf3f36ef3
+            // Means that pages must have the "." as part of the page type.  If you are on a prior
+            // version of Laravel you can remove the "." from in front of the $pagetype variables.
             if (! is_dir($topdir . DIRECTORY_SEPARATOR . $dirname)) {
                 if (strpos($dirname, '.blade.php')) {
                     $page_name = str_replace('.blade.php', '', $dirname);
-                    $pagetype = 'blade.php';
+                    $pagetype = '.blade.php';
                 } elseif (strpos($dirname, '.twig')) {
                     $page_name = str_replace('.twig', '', $dirname);
-                    $pagetype = 'twig';
+                    $pagetype = '.twig';
                 } else {
                     echo "No template type for $dirname, skipping\n";
                     continue;
@@ -65,10 +69,10 @@ class ExamplePageSeeder extends Seeder
 
                 if (strpos($filename, '.blade.php')) {
                     $page_name = str_replace('.blade.php', '', $filename);
-                    $pagetype = 'blade.php';
+                    $pagetype = '.blade.php';
                 } elseif (strpos($filename, '.twig')) {
                     $page_name = str_replace('.twig', '', $filename);
-                    $pagetype = 'twig';
+                    $pagetype = '.twig';
                 } else {
                     echo "No template type for $filename, skipping\n";
                     continue;

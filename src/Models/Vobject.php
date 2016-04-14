@@ -4,15 +4,18 @@
  */
 namespace Delatbabel\ViewPages\Models;
 
+use Delatbabel\Fluents\Fluents;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Delatbabel\SiteConfig\Models\Website;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Fluent;
 
 /**
  * Class Vobject
  *
- * This model class is for the database backed website templates table.
+ * This model class is for the database backed website objects table.
  *
  * ### Example
  *
@@ -27,7 +30,7 @@ use Illuminate\Support\Facades\Log;
  */
 class Vobject extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Fluents;
 
     protected $fillable = ['website_id', 'objectkey', 'name', 'description',
         'content'];
@@ -57,7 +60,7 @@ class Vobject extends Model
      * that has no relations to any website.
      *
      * @param string $objectkey
-     * @return Vobject
+     * @return Fluent
      */
     public static function make($objectkey = 'index')
     {
@@ -69,13 +72,14 @@ class Vobject extends Model
             $objectkey = 'index';
         }
 
-        // Determine whether there is an extension separator on the object
-        // key or not, and strip it off if there is one present.
-        $url_parts = explode(static::EXTENSION_SEPARATOR, $objectkey, 2);
-        $objectkey = $url_parts[0];
-
         // Find the current website ID
         $website_id = Website::currentWebsiteId();
+
+        // Check for a cached copy
+        $cache_key = 'vobject__' . $website_id . '__' . $objectkey;
+        if (Cache::has($cache_key)) {
+            return Cache::get($cache_key);
+        }
 
         // Try to find a object that is joined to the current website
         /** @var Vobject $object */
@@ -86,7 +90,9 @@ class Vobject extends Model
         if (! empty($object)) {
             #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
             #    'Found vobject on first look,  ID == ' . $object->id);
-            return $object;
+            $fluent = $object->toFluent();
+            Cache::put($cache_key, $fluent, 60);
+            return $fluent;
         }
 
         // If there is no such object, try to find a object that is not joined
@@ -96,8 +102,14 @@ class Vobject extends Model
             ->whereNull('website_id')
             ->select(['id', 'name', 'content', 'updated_at'])
             ->first();
+        if (empty($object)) {
+            return null;
+        }
+
         #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
         #    'Found vobject on second look,  ID == ' . $object->id);
-        return $object;
+        $fluent = $object->toFluent();
+        Cache::put($cache_key, $fluent, 60);
+        return $fluent;
     }
 }

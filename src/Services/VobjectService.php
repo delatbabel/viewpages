@@ -41,17 +41,7 @@ class VobjectService
      */
     public function make($objectkey)
     {
-        // Find the current website ID
-        $website_id = Website::currentWebsiteId();
-
-        // Check for a cached copy
-        $cache_key = 'objects.' . $website_id . $objectkey;
-        if (Cache::has($cache_key)) {
-            $vobject = Cache::get($cache_key);
-        } else {
-            $vobject = Vobject::make($objectkey);
-            Cache::put($cache_key, $vobject, 60);
-        }
+        $vobject = Vobject::make($objectkey);
 
         // Return null if the object is not found
         if (empty($vobject)) {
