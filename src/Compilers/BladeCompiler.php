@@ -64,7 +64,6 @@ class BladeCompiler extends BaseBladeCompiler
      */
     public function isExpired($path)
     {
-        // TODO: Fix all of this.
         $compiled = $this->getCompiledPath($path);
 
         // If the compiled file doesn't exist we will indicate that the view is expired
@@ -79,9 +78,6 @@ class BladeCompiler extends BaseBladeCompiler
         #    'Checking isExpired for ' . $path . ' which is ' . $viewLastModified
         #);
 
-        // For the time being just return true. It's just as fast to reload the
-        // view from the database as it is to load the view from the database
-        // to check its updated time.
         $compiledLastModified = $this->files->lastModified($compiled);
         #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
         #    'Checking against compiled path ' . $compiled . ' which has last modified timestamp ' .
