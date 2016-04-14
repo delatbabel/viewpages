@@ -8,8 +8,9 @@
 namespace Delatbabel\ViewPages\Compilers;
 
 use Delatbabel\ViewPages\Loaders\LoaderInterface;
-use Illuminate\View\Compilers\BladeCompiler as BaseBladeCompiler;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\Compilers\BladeCompiler as BaseBladeCompiler;
 
 /**
  * Class BladeCompiler
@@ -58,19 +59,11 @@ class BladeCompiler extends BaseBladeCompiler
     /**
      * Determine if the view at the given path is expired.
      *
-     * TODO: Have a default expiry time and if the last modified time is more than
-     * the default expiry time seconds ago then return false.
-     *
      * @param  string  $path
      * @return bool
      */
     public function isExpired($path)
     {
-        // For the time being just return true. It's just as fast to reload the
-        // view from the database as it is to load the view from the database
-        // to check its updated time.
-        return true;
-
         // TODO: Fix all of this.
         $compiled = $this->getCompiledPath($path);
 
@@ -81,8 +74,20 @@ class BladeCompiler extends BaseBladeCompiler
             return true;
         }
 
-        $lastModified = $this->files->lastModified($path);
+        $viewLastModified = $this->loader->lastModified($path);
+        #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+        #    'Checking isExpired for ' . $path . ' which is ' . $viewLastModified
+        #);
 
-        return $lastModified >= $this->files->lastModified($compiled);
+        // For the time being just return true. It's just as fast to reload the
+        // view from the database as it is to load the view from the database
+        // to check its updated time.
+        $compiledLastModified = $this->files->lastModified($compiled);
+        #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+        #    'Checking against compiled path ' . $compiled . ' which has last modified timestamp ' .
+        #    $compiledLastModified
+        #);
+
+        return $viewLastModified >= $compiledLastModified;
     }
 }

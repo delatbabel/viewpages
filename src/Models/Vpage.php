@@ -87,6 +87,9 @@ class Vpage extends Model
             $url = 'index';
         }
 
+        #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+        #    'Looking for vpage where ' . $field . ' = ' . $url);
+
         // Determine whether there is an extension separator on the page
         // key or not, and strip it off if there is one present.
         $url_parts = explode(static::EXTENSION_SEPARATOR, $url, 2);
@@ -104,6 +107,8 @@ class Vpage extends Model
         // time.  Cache the results after one fetch.
         $cache_key = 'vpage__' . $website_id . '__' . $url;
         if (Cache::has($cache_key)) {
+            #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+            #    'Found in cache');
             return Cache::get($cache_key);
         }
 
@@ -174,7 +179,7 @@ class Vpage extends Model
      * find it then it looks by URL.
      *
      * @param string $url
-     * @return Vpage
+     * @return Fluent
      */
     public static function make($url = 'index')
     {

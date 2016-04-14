@@ -30,4 +30,12 @@ interface LoaderInterface
      * @return string
      */
     public function get($name);
+
+    /**
+     * Return the last modified timestamp of a view.
+     *
+     * @param string $name
+     * @return integer
+     */
+    public function lastModified($name);
 }

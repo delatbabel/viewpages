@@ -5,7 +5,6 @@
 
 namespace Delatbabel\ViewPages;
 
-use Delatbabel\ViewPages\Models\Vpage;
 use Illuminate\View\Factory as BaseFactory;
 use Illuminate\View\View;
 use Illuminate\Contracts\View\Factory as FactoryContract;
@@ -13,11 +12,9 @@ use Illuminate\Contracts\View\Factory as FactoryContract;
 /**
  * Class Factory
  *
- * This extends the Wpb\String_Blade_Compiler\Factory class so that
+ * This extends the Illuminate\View\Factory class so that
  * the make function, instead of looking for a view on disk, looks
  * for it in the database.
- *
- * @link https://github.com/delatbabel/StringBladeCompiler/tree/3.0
  */
 class Factory extends BaseFactory implements FactoryContract
 {

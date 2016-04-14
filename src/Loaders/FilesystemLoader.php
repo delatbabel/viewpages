@@ -45,4 +45,19 @@ class FilesystemLoader implements LoaderInterface
     {
         return $this->files->get($name);
     }
+
+    /**
+     * Return the last modified timestamp of a view.
+     *
+     * @param string $name
+     * @return integer
+     * @throws FileNotFoundException
+     */
+    public function lastModified($name)
+    {
+        if (! $this->files->exists($name)) {
+            throw new FileNotFoundException("$name does not exist");
+        }
+        return $this->files->lastModified($name);
+    }
 }

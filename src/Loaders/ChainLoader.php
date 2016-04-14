@@ -48,4 +48,23 @@ class ChainLoader implements LoaderInterface
 
         throw new InvalidArgumentException("View [$name] not found in any registered loader.");
     }
+
+    /**
+     * Return the last modified timestamp of a view.
+     *
+     * @param string $name
+     * @return integer
+     */
+    public function lastModified($name)
+    {
+        /** @var LoaderInterface $loader */
+        foreach ($this->loaders as $loader) {
+            try {
+                return $loader->lastModified($name);
+            } catch (\Exception $e) {
+            }
+        }
+
+        throw new InvalidArgumentException("View [$name] not found in any registered loader.");
+    }
 }

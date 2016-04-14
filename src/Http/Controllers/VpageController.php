@@ -6,6 +6,7 @@
 namespace Delatbabel\ViewPages\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Wpb\String_Blade_Compiler\StringView;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 
@@ -19,7 +20,7 @@ class VpageController extends BaseController
     /**
      * Make and return a view relating to the current URL.
      *
-     * @return View
+     * @return StringView
      */
     public function make(Request $request)
     {
