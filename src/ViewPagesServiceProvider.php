@@ -45,6 +45,9 @@ class ViewPagesServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../database/seeds' => $this->app->databasePath() . '/seeds'
         ], 'seeds');
+        $this->publishes([
+            __DIR__ . '/../config' => config_path()
+        ], 'config');
 
         // Register other providers required by this provider, which saves the caller
         // from having to register them each individually.
