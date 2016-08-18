@@ -44,7 +44,7 @@ class Vobject extends Model
      */
     public function website()
     {
-        return $this->belongsTo('Delatbabel\SiteConfig\Models\Website');
+        return $this->belongsTo('\Delatbabel\SiteConfig\Models\Website');
     }
 
     /**

@@ -47,7 +47,7 @@ class Vpage extends Model
      */
     public function websites()
     {
-        return $this->belongsToMany('Delatbabel\SiteConfig\Models\Website');
+        return $this->belongsToMany('\Delatbabel\SiteConfig\Models\Website');
     }
 
     /**
