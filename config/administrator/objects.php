@@ -31,12 +31,11 @@ return array(
      * The filter set
      */
     'filters' => array(
-        'id',
-        'pagekey' => array(
-            'title' => 'Page Key',
+        'objectkey' => array(
+            'title' => 'Object Key',
         ),
-        'url' => array(
-            'title' => 'Page URL',
+        'name' => array(
+            'title' => 'Name',
         ),
     ),
 
@@ -58,7 +57,7 @@ return array(
         ),
         'content' => array(
             'title' => 'Content',
-            'type' => 'textarea',
+            'type' => 'wysiwyg',
         ),
         'website' => array(
             'title' => 'Website',
@@ -68,4 +67,5 @@ return array(
         ),
     ),
 
+    'form_width' => 700,
 );

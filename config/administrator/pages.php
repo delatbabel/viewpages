@@ -34,7 +34,6 @@ return array(
      * The filter set
      */
     'filters' => array(
-        'id',
         'pagekey' => array(
             'title' => 'Page Key',
         ),
@@ -69,7 +68,7 @@ return array(
         ),
         'content' => array(
             'title' => 'Content',
-            'type' => 'textarea',
+            'type' => 'wysiwyg',
         ),
         'websites' => array(
             'title' => 'Websites',
@@ -79,4 +78,5 @@ return array(
         ),
     ),
 
+    'form_width'    => 700,
 );
