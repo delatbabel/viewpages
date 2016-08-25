@@ -48,6 +48,16 @@ class Vobject extends Model
     }
 
     /**
+     * Many:1 relationship with Category model
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo('\Delatbabel\NestedCategories\Models\Category');
+    }
+
+    /**
      * Fetch a object by objectkey or url.
      *
      * Returns a Vobject object for a specific objectkey for the current website.

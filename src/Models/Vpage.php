@@ -51,6 +51,16 @@ class Vpage extends Model
     }
 
     /**
+     * Many:1 relationship with Category model
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo('\Delatbabel\NestedCategories\Models\Category');
+    }
+
+    /**
      * Fetch a page by pagekey or url.
      *
      * Returns a Vpage object for a specific pagekey or URL for the

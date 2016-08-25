@@ -40,6 +40,12 @@ return array(
         'url' => array(
             'title' => 'Page URL',
         ),
+        'category' => array(
+            'title' => 'Category',
+            'type' => 'relationship',
+            'name_field' => 'name',
+            'options_sort_field' => 'name',
+        ),
     ),
 
     /**
@@ -72,6 +78,12 @@ return array(
         ),
         'websites' => array(
             'title' => 'Websites',
+            'type' => 'relationship',
+            'name_field' => 'name',
+            'options_sort_field' => 'name',
+        ),
+        'category' => array(
+            'title' => 'Category',
             'type' => 'relationship',
             'name_field' => 'name',
             'options_sort_field' => 'name',

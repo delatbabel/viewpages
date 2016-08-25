@@ -30,6 +30,7 @@ class CreateVpagesTable extends Migration
         /** @var \Illuminate\Database\Schema\Blueprint $table */
         Schema::create($this->tableName, function ($table) {
             $table->increments('id');
+            $table->integer('category_id')->unsigned()->nullable();
             $table->string('pagekey', 255)->default('')->index();
             $table->string('url', 255)->default('')->index();
             $table->string('name', 255)->default('');
@@ -39,6 +40,11 @@ class CreateVpagesTable extends Migration
             $table->longText('content')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('category_id')
+                ->references('id')->on('categories')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
     }
 

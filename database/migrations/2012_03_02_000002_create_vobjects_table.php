@@ -31,6 +31,7 @@ class CreateVobjectsTable extends Migration
         Schema::create($this->tableName, function ($table) {
             $table->increments('id');
             $table->integer('website_id')->unsigned()->nullable();
+            $table->integer('category_id')->unsigned()->nullable();
             $table->string('objectkey', 255)->default('')->index();
             $table->string('name', 255)->default('');
             $table->string('description', 255)->nullable();
@@ -40,6 +41,11 @@ class CreateVobjectsTable extends Migration
 
             $table->foreign('website_id')
                 ->references('id')->on('websites')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+
+            $table->foreign('category_id')
+                ->references('id')->on('categories')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
         });
