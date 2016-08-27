@@ -18,7 +18,7 @@ use InvalidArgumentException;
 class ChainViewFinder implements ViewFinderInterface
 {
     /** @var  array of ViewFinderInterface */
-    protected $viewFinders = array();
+    protected $viewFinders = [];
 
     /**
      * Add a viewfinder to the list.

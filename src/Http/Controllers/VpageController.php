@@ -6,9 +6,9 @@
 namespace Delatbabel\ViewPages\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Wpb\String_Blade_Compiler\StringView;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
+use Wpb\String_Blade_Compiler\StringView;
 
 /**
  * Class VpageController

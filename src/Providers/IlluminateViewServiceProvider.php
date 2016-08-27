@@ -7,16 +7,16 @@
 
 namespace Delatbabel\ViewPages\Providers;
 
+use Delatbabel\ViewPages\Compilers\BladeCompiler;
+use Delatbabel\ViewPages\Factory;
+use Delatbabel\ViewPages\Finders\ChainViewFinder;
+use Delatbabel\ViewPages\Finders\VpageViewFinder;
 use Delatbabel\ViewPages\Loaders\ChainLoader;
 use Delatbabel\ViewPages\Loaders\FilesystemLoader;
 use Delatbabel\ViewPages\Loaders\VpageLoader;
-use Delatbabel\ViewPages\Finders\ChainViewFinder;
-use Delatbabel\ViewPages\Finders\VpageViewFinder;
-use Delatbabel\ViewPages\Compilers\BladeCompiler;
-use Illuminate\View\ViewServiceProvider as BaseViewServiceProvider;
-use Illuminate\View\FileViewFinder;
 use Illuminate\View\Engines\CompilerEngine;
-use Delatbabel\ViewPages\Factory;
+use Illuminate\View\FileViewFinder;
+use Illuminate\View\ViewServiceProvider as BaseViewServiceProvider;
 
 /**
  * Class IlluminateViewServiceProvider

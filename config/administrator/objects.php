@@ -6,7 +6,7 @@
  * @link https://github.com/ddpro/admin/blob/master/docs/model-configuration.md
  */
 
-return array(
+return [
 
     'title' => 'Objects',
 
@@ -17,67 +17,67 @@ return array(
     /**
      * The display columns
      */
-    'columns' => array(
+    'columns' => [
         'id',
-        'objectkey' => array(
+        'objectkey' => [
             'title' => 'Object Key',
-        ),
-        'name' => array(
+        ],
+        'name' => [
             'title' => 'Name',
-        ),
-    ),
+        ],
+    ],
 
     /**
      * The filter set
      */
-    'filters' => array(
-        'objectkey' => array(
+    'filters' => [
+        'objectkey' => [
             'title' => 'Object Key',
-        ),
-        'name' => array(
+        ],
+        'name' => [
             'title' => 'Name',
-        ),
-        'category' => array(
-            'title' => 'Category',
-            'type' => 'relationship',
-            'name_field' => 'name',
+        ],
+        'category' => [
+            'title'              => 'Category',
+            'type'               => 'relationship',
+            'name_field'         => 'name',
             'options_sort_field' => 'name',
-        ),
-    ),
+        ],
+    ],
 
     /**
      * The editable fields
      */
-    'edit_fields' => array(
-        'objectkey' => array(
+    'edit_fields' => [
+        'objectkey' => [
             'title' => 'Object Key',
-            'type' => 'text',
-        ),
-        'name' => array(
+            'type'  => 'text',
+        ],
+        'name' => [
             'title' => 'Name',
-            'type' => 'text',
-        ),
-        'description' => array(
+            'type'  => 'text',
+        ],
+        'description' => [
             'title' => 'Description',
-            'type' => 'text',
-        ),
-        'content' => array(
+            'type'  => 'text',
+        ],
+        'content' => [
             'title' => 'Content',
-            'type' => 'wysiwyg',
-        ),
-        'website' => array(
-            'title' => 'Website',
-            'type' => 'relationship',
-            'name_field' => 'name',
+            'type'  => 'wysiwyg',
+        ],
+        'website' => [
+            'title'              => 'Website',
+            'type'               => 'relationship',
+            'name_field'         => 'name',
             'options_sort_field' => 'name',
-        ),
-        'category' => array(
-            'title' => 'Category',
-            'type' => 'relationship',
-            'name_field' => 'name',
+        ],
+        'category' => [
+            'title'              => 'Category',
+            'type'               => 'relationship',
+            'name_field'         => 'name',
             'options_sort_field' => 'name',
-        ),
-    ),
+        ],
+    ],
 
     'form_width' => 700,
-);
+];
