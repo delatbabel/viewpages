@@ -1,5 +1,9 @@
 # ViewPages
 
+[![StyleCI](https://styleci.io/repos/50633793/shield)](https://styleci.io/repos/50633793)
+[![Latest Stable Version](https://poser.pugx.org/delatbabel/viewpages/version.png)](https://packagist.org/packages/ddpro/viewpages)
+[![Total Downloads](https://poser.pugx.org/delatbabel/viewpages/d/total.png)](https://packagist.org/packages/delatbabel/viewpages)
+
 Support view/rendering of Laravel pages and templates from a database.
 
 Can be used for content management, admin interfaces (e.g. using AdminLTE or other
