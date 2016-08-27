@@ -5,9 +5,9 @@
 
 namespace Delatbabel\ViewPages;
 
+use Illuminate\Contracts\View\Factory as FactoryContract;
 use Illuminate\View\Factory as BaseFactory;
 use Illuminate\View\View;
-use Illuminate\Contracts\View\Factory as FactoryContract;
 
 /**
  * Class Factory

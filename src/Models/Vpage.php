@@ -5,9 +5,9 @@
 namespace Delatbabel\ViewPages\Models;
 
 use Delatbabel\Fluents\Fluents;
+use Delatbabel\SiteConfig\Models\Website;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Delatbabel\SiteConfig\Models\Website;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Fluent;
@@ -103,7 +103,7 @@ class Vpage extends Model
         // Determine whether there is an extension separator on the page
         // key or not, and strip it off if there is one present.
         $url_parts = explode(static::EXTENSION_SEPARATOR, $url, 2);
-        $url = $url_parts[0];
+        $url       = $url_parts[0];
 
         // TODO: The extension for the pagetype is in $url_parts[1] if it
         // is not empty. This could be "blade.php", "php" or "twig".  Restrict
@@ -196,7 +196,7 @@ class Vpage extends Model
         // Find by pagekey first.  Convert any '/' characters injected
         // into the search back to '.' characters.
         $pagekey = strtr($url, '/', '.');
-        $page = static::fetch($pagekey, 'pagekey');
+        $page    = static::fetch($pagekey, 'pagekey');
 
         // Then find by URL if pagekey is not found
         if (empty($page)) {

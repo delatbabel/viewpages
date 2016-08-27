@@ -8,10 +8,10 @@
 namespace Delatbabel\ViewPages\Providers;
 
 use Delatbabel\ViewPages\Loaders\VpageTwigLoader;
-use TwigBridge\ServiceProvider as BaseServiceProvider;
 use Twig_Loader_Array;
-use TwigBridge\Twig\Loader;
 use Twig_Loader_Chain;
+use TwigBridge\ServiceProvider as BaseServiceProvider;
+use TwigBridge\Twig\Loader;
 
 /**
  * Class TwigBridgeServiceProvider

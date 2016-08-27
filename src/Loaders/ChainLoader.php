@@ -17,7 +17,7 @@ use InvalidArgumentException;
 class ChainLoader implements LoaderInterface
 {
     /** @var  array of LoaderInterface */
-    protected $loaders = array();
+    protected $loaders = [];
 
     /**
      * Add a loader to the list.

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use Delatbabel\ViewPages\Models\Vpage;
+use Illuminate\Database\Seeder;
 
 class ExamplePageSeeder extends Seeder
 {
@@ -39,10 +39,10 @@ class ExamplePageSeeder extends Seeder
             if (! is_dir($topdir . DIRECTORY_SEPARATOR . $dirname)) {
                 if (strpos($dirname, '.blade.php')) {
                     $page_name = str_replace('.blade.php', '', $dirname);
-                    $pagetype = '.blade.php';
+                    $pagetype  = '.blade.php';
                 } elseif (strpos($dirname, '.twig')) {
                     $page_name = str_replace('.twig', '', $dirname);
-                    $pagetype = '.twig';
+                    $pagetype  = '.twig';
                 } else {
                     echo "No template type for $dirname, skipping\n";
                     continue;
@@ -69,10 +69,10 @@ class ExamplePageSeeder extends Seeder
 
                 if (strpos($filename, '.blade.php')) {
                     $page_name = str_replace('.blade.php', '', $filename);
-                    $pagetype = '.blade.php';
+                    $pagetype  = '.blade.php';
                 } elseif (strpos($filename, '.twig')) {
                     $page_name = str_replace('.twig', '', $filename);
-                    $pagetype = '.twig';
+                    $pagetype  = '.twig';
                 } else {
                     echo "No template type for $filename, skipping\n";
                     continue;
