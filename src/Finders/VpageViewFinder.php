@@ -7,8 +7,8 @@
 
 namespace Delatbabel\ViewPages\Finders;
 
-use Illuminate\View\ViewFinderInterface;
 use Delatbabel\ViewPages\Models\Vpage;
+use Illuminate\View\ViewFinderInterface;
 use InvalidArgumentException;
 
 /**

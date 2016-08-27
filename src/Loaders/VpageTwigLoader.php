@@ -8,8 +8,8 @@
 namespace Delatbabel\ViewPages\Loaders;
 
 use Delatbabel\ViewPages\Models\Vpage;
-use Twig_LoaderInterface;
 use Twig_Error_Loader;
+use Twig_LoaderInterface;
 
 /**
  * Class VpageTwigLoader

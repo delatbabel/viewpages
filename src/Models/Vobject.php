@@ -5,9 +5,9 @@
 namespace Delatbabel\ViewPages\Models;
 
 use Delatbabel\Fluents\Fluents;
+use Delatbabel\SiteConfig\Models\Website;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Delatbabel\SiteConfig\Models\Website;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Fluent;

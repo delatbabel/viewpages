@@ -6,7 +6,7 @@
  * @link https://github.com/ddpro/admin/blob/master/docs/model-configuration.md
  */
 
-return array(
+return [
 
     'title' => 'Pages',
 
@@ -17,78 +17,78 @@ return array(
     /**
      * The display columns
      */
-    'columns' => array(
+    'columns' => [
         'id',
-        'pagekey' => array(
+        'pagekey' => [
             'title' => 'Page Key',
-        ),
-        'url' => array(
+        ],
+        'url' => [
             'title' => 'Page URL',
-        ),
-        'name' => array(
+        ],
+        'name' => [
             'title' => 'Name',
-        ),
-    ),
+        ],
+    ],
 
     /**
      * The filter set
      */
-    'filters' => array(
-        'pagekey' => array(
+    'filters' => [
+        'pagekey' => [
             'title' => 'Page Key',
-        ),
-        'url' => array(
+        ],
+        'url' => [
             'title' => 'Page URL',
-        ),
-        'category' => array(
-            'title' => 'Category',
-            'type' => 'relationship',
-            'name_field' => 'name',
+        ],
+        'category' => [
+            'title'              => 'Category',
+            'type'               => 'relationship',
+            'name_field'         => 'name',
             'options_sort_field' => 'name',
-        ),
-    ),
+        ],
+    ],
 
     /**
      * The editable fields
      */
-    'edit_fields' => array(
-        'pagekey' => array(
+    'edit_fields' => [
+        'pagekey' => [
             'title' => 'Page Key',
-            'type' => 'text',
-        ),
-        'url' => array(
+            'type'  => 'text',
+        ],
+        'url' => [
             'title' => 'Page URL',
-            'type' => 'text',
-        ),
-        'name' => array(
+            'type'  => 'text',
+        ],
+        'name' => [
             'title' => 'Name',
-            'type' => 'text',
-        ),
-        'description' => array(
+            'type'  => 'text',
+        ],
+        'description' => [
             'title' => 'Description',
-            'type' => 'text',
-        ),
-        'pagetype' => array(
+            'type'  => 'text',
+        ],
+        'pagetype' => [
             'title' => 'Page Type',
-            'type' => 'text',
-        ),
-        'content' => array(
+            'type'  => 'text',
+        ],
+        'content' => [
             'title' => 'Content',
-            'type' => 'wysiwyg',
-        ),
-        'websites' => array(
-            'title' => 'Websites',
-            'type' => 'relationship',
-            'name_field' => 'name',
+            'type'  => 'wysiwyg',
+        ],
+        'websites' => [
+            'title'              => 'Websites',
+            'type'               => 'relationship',
+            'name_field'         => 'name',
             'options_sort_field' => 'name',
-        ),
-        'category' => array(
-            'title' => 'Category',
-            'type' => 'relationship',
-            'name_field' => 'name',
+        ],
+        'category' => [
+            'title'              => 'Category',
+            'type'               => 'relationship',
+            'name_field'         => 'name',
             'options_sort_field' => 'name',
-        ),
-    ),
+        ],
+    ],
 
     'form_width'    => 700,
-);
+];

@@ -7,8 +7,8 @@
 
 namespace Delatbabel\ViewPages\Loaders;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Filesystem\Filesystem;
 
 /**
  * Class FilesystemLoader
