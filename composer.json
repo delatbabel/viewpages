@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "delatbabel/applog": "~1.0",
+        "delatbabel/applog": "dev-master",
         "delatbabel/fluents": "~1.0",
         "delatbabel/site-config": "dev-master",
         "delatbabel/nestedcategories": "dev-master",
