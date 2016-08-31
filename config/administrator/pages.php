@@ -14,6 +14,8 @@ return [
 
     'model' => '\Delatbabel\ViewPages\Models\Vpage',
 
+    'server_side' => true,
+
     /**
      * The display columns
      */
