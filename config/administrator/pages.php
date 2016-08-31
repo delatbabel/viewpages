@@ -30,6 +30,12 @@ return [
         'name' => [
             'title' => 'Name',
         ],
+        'category' => [
+            'title'         => 'Category',
+            'type'          => 'relationship',
+            'relationship'  => 'category',
+            'select'        => '(:table).name',
+        ],
     ],
 
     /**
