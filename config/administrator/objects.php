@@ -65,7 +65,7 @@ return [
         ],
         'content' => [
             'title' => 'Content',
-            'type'  => 'wysiwyg',
+            'type'  => 'html',
         ],
         'website' => [
             'title'              => 'Website',

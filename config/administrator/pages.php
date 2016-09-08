@@ -82,7 +82,7 @@ return [
         ],
         'content' => [
             'title' => 'Content',
-            'type'  => 'wysiwyg',
+            'type'  => 'html',
         ],
         'websites' => [
             'title'              => 'Websites',
