@@ -165,10 +165,14 @@ Store these in the database tables alongside your blade templates using `pagetyp
 Once the templates are created, you can use them just like any other view file, e.g.
 
 ```php
-    return View::make("dashboard.sysadmin")
+    return view("dashboard.sysadmin")
         ->with('page_title', 'System Administrator Dashboard')
         ->with('tasks', $tasks);
 ```
+
+Note that there's a bug in the Laravel View class where it uses its native factory in all
+cases, rather than fetching the factory from the application instance, so use the view()
+helper rather than the facade class like View::make().
 
 The underlying Factory class will try to find the view by doing the following steps in
 order until a hit is found:
