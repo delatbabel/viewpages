@@ -42,6 +42,8 @@ class VpageController extends BaseController
         # Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
         #     'Make page for URL ' . $url);
 
-        return View::make($url);
+        return view($url);
+
+        // return View::make($url);
     }
 }
