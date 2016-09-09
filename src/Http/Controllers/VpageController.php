@@ -44,6 +44,7 @@ class VpageController extends BaseController
 
         return view($url);
 
+        // Don't do this because the Laravel facade uses the wrong factory class.
         // return View::make($url);
     }
 }
