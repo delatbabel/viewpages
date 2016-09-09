@@ -8,7 +8,6 @@ namespace Delatbabel\ViewPages\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
-use Wpb\String_Blade_Compiler\StringView;
 
 /**
  * Class VpageController
@@ -20,7 +19,18 @@ class VpageController extends BaseController
     /**
      * Make and return a view relating to the current URL.
      *
-     * @return StringView
+     * This is an example controller that can be used or copied or extended in your applications
+     * to provide CMS-like functionality.  It returns the view based on the URL in the
+     * current request.
+     *
+     * ### Example
+     *
+     * <code>
+     * // If request contains the URL 1/2/3 then this will return the view with the URL 1/2/3
+     * return $this->make($request);
+     * </code>
+     *
+     * @return \Illuminate\Contracts\View\View
      */
     public function make(Request $request)
     {
