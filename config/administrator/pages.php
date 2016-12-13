@@ -1,74 +1,83 @@
 <?php
-
 /**
  * Pages model config
  *
  * @link https://github.com/ddpro/admin/blob/master/docs/model-configuration.md
  */
-
 return [
-
-    'title' => 'Pages',
-
-    'single' => 'page',
-
-    'model' => '\Delatbabel\ViewPages\Models\Vpage',
-
-    'server_side' => true,
-
+    'title'           => 'Pages',
+    'single'          => 'page',
+    'model'           => '\Delatbabel\ViewPages\Models\Vpage',
+    'server_side'     => true,
     /**
      * The display columns
      */
-    'columns' => [
+    'columns'         => [
         'id',
-        'pagekey' => [
+        'pagekey'    => [
             'title' => 'Page Key',
         ],
-        'url' => [
+        'url'        => [
             'title' => 'Page URL',
         ],
-        'name' => [
+        'name'       => [
             'title' => 'Name',
         ],
-        'category' => [
-            'title'         => 'Category',
-            'type'          => 'relationship',
-            'relationship'  => 'category',
-            'select'        => '(:table).name',
+        'created_at' => [
+            'title' => 'Create Date',
+        ],
+        'category'   => [
+            'title'        => 'Category',
+            'type'         => 'relationship',
+            'relationship' => 'category',
+            'select'       => '(:table).name'
         ],
     ],
-
     /**
      * The filter set
      */
-    'filters' => [
-        'pagekey' => [
+    'filters'         => [
+        'pagekey'    => [
             'title' => 'Page Key',
         ],
-        'url' => [
-            'title' => 'Page URL',
+        'url'    => [
+            'title' => 'URL',
         ],
-        'category' => [
+        'category'   => [
             'title'              => 'Category',
             'type'               => 'relationship',
             'name_field'         => 'name',
             'options_sort_field' => 'name',
+            'options_filter'     => function ($query) {
+                $obj = \Delatbabel\NestedCategories\Models\Category::where('slug', 'page-types')->first();
+                if ($obj) {
+                    $query->where('parent_id', $obj->id);
+                } else {
+                    $query->where('slug', 'page-types');
+                }
+            },
         ],
     ],
-
     /**
      * The editable fields
      */
-    'edit_fields' => [
-        'pagekey' => [
+    'rules'           => [
+        'category' => 'required',
+    ],
+    'edit_fields'     => [
+        'pagetype'    => [
+            'title'   => 'Page Type',
+            'type'    => 'text',
+            'visible' => false,
+        ],
+        'pagekey'     => [
             'title' => 'Page Key',
             'type'  => 'text',
         ],
-        'url' => [
-            'title' => 'Page URL',
-            'type'  => 'text',
+        'url'         => [
+            'title' => 'URL',
         ],
-        'name' => [
+        'name'        => [
             'title' => 'Name',
             'type'  => 'text',
         ],
@@ -76,27 +85,32 @@ return [
             'title' => 'Description',
             'type'  => 'text',
         ],
-        'pagetype' => [
-            'title' => 'Page Type',
-            'type'  => 'text',
+        'category'    => [
+            'title'              => 'Category',
+            'type'               => 'relationship',
+            'name_field'         => 'name',
+            'options_sort_field' => 'name',
+            'options_filter'     => function ($query) {
+                $obj = \Delatbabel\NestedCategories\Models\Category::where('slug', 'page-types')->first();
+                if ($obj) {
+                    $query->where('parent_id', $obj->id);
+                } else {
+                    $query->where('slug', 'page-types');
+                }
+            },
         ],
-        'content' => [
-            'title' => 'Content',
-            'type'  => 'html',
-        ],
-        'websites' => [
+        'websites'    => [
             'title'              => 'Websites',
             'type'               => 'relationship',
             'name_field'         => 'name',
             'options_sort_field' => 'name',
         ],
-        'category' => [
-            'title'              => 'Category',
-            'type'               => 'relationship',
-            'name_field'         => 'name',
-            'options_sort_field' => 'name',
+        'content'     => [
+            'title'  => 'Content',
+            'type'   => 'html',
+            'limit'  => 2000, //optional, defaults to no limit
+            'height' => 20, //optional, defaults to 100
         ],
     ],
-
-    'form_width'    => 700,
+    'template_handle' => \Delatbabel\ViewPages\Form\PageForm::class,
 ];
