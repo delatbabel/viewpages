@@ -5,15 +5,17 @@
  * @link https://github.com/ddpro/admin/blob/master/docs/model-configuration.md
  */
 return [
-    'title'           => 'Pages',
-    'single'          => 'page',
-    'model'           => '\Delatbabel\ViewPages\Models\Vpage',
-    'server_side'     => true,
+    'title'              => 'Pages',
+    'single'             => 'page',
+    'model'              => '\Delatbabel\ViewPages\Models\Vpage',
+    'server_side'        => true,
     /**
      * The display columns
      */
-    'columns'         => [
-        'id',
+    'columns'            => [
+        'id'   => [
+            'title' => 'ID',
+        ],
         'pagekey'    => [
             'title' => 'Page Key',
         ],
@@ -30,20 +32,20 @@ return [
             'title'        => 'Category',
             'type'         => 'relationship',
             'relationship' => 'category',
-            'select'       => '(:table).name'
+            'select'       => '(:table).name',
         ],
     ],
     /**
      * The filter set
      */
-    'filters'         => [
-        'pagekey'    => [
+    'filters'            => [
+        'pagekey'  => [
             'title' => 'Page Key',
         ],
-        'url'    => [
+        'url'      => [
             'title' => 'URL',
         ],
-        'category'   => [
+        'category' => [
             'title'              => 'Category',
             'type'               => 'relationship',
             'name_field'         => 'name',
@@ -61,10 +63,10 @@ return [
     /**
      * The editable fields
      */
-    'rules'           => [
+    'rules'              => [
         'category' => 'required',
     ],
-    'edit_fields'     => [
+    'edit_fields'        => [
         'pagetype'    => [
             'title'   => 'Page Type',
             'type'    => 'text',
@@ -86,7 +88,7 @@ return [
             'type'  => 'text',
         ],
         'category'    => [
-            'title'              => 'Category',
+            'title'              => 'Category <span class="text-danger">*</span>',
             'type'               => 'relationship',
             'name_field'         => 'name',
             'options_sort_field' => 'name',
@@ -108,9 +110,8 @@ return [
         'content'     => [
             'title'  => 'Content',
             'type'   => 'html',
-            'limit'  => 2000, //optional, defaults to no limit
             'height' => 20, //optional, defaults to 100
         ],
     ],
-    'template_handle' => \Delatbabel\ViewPages\Form\PageForm::class,
+    'controller_handler' => \App\Http\Controllers\PageController::class,
 ];

@@ -19,12 +19,14 @@ return [
     /**
      * The display columns
      */
-    'columns' => [
-        'id',
+    'columns'     => [
+        'id'   => [
+            'title' => 'ID',
+        ],
         'objectkey' => [
             'title' => 'Object Key',
         ],
-        'name' => [
+        'name'      => [
             'title' => 'Name',
         ],
     ],
@@ -32,14 +34,14 @@ return [
     /**
      * The filter set
      */
-    'filters' => [
+    'filters'     => [
         'objectkey' => [
             'title' => 'Object Key',
         ],
-        'name' => [
+        'name'      => [
             'title' => 'Name',
         ],
-        'category' => [
+        'category'  => [
             'title'              => 'Category',
             'type'               => 'relationship',
             'name_field'         => 'name',
@@ -51,11 +53,11 @@ return [
      * The editable fields
      */
     'edit_fields' => [
-        'objectkey' => [
+        'objectkey'   => [
             'title' => 'Object Key',
             'type'  => 'text',
         ],
-        'name' => [
+        'name'        => [
             'title' => 'Name',
             'type'  => 'text',
         ],
@@ -63,17 +65,17 @@ return [
             'title' => 'Description',
             'type'  => 'text',
         ],
-        'content' => [
+        'content'     => [
             'title' => 'Content',
             'type'  => 'html',
         ],
-        'website' => [
+        'website'     => [
             'title'              => 'Website',
             'type'               => 'relationship',
             'name_field'         => 'name',
             'options_sort_field' => 'name',
         ],
-        'category' => [
+        'category'    => [
             'title'              => 'Category',
             'type'               => 'relationship',
             'name_field'         => 'name',
