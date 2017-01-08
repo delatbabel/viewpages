@@ -20,12 +20,15 @@ class PageCategoriesSeeder extends CategoriesTableBaseArraySeeder
          */
         return [
             'Page Types' => [
-                'Home'              => [],
+                'CMS'               => [],
                 'Admin'             => [],
+                'Template'          => [],
+                'Error'             => [],
             ],
             'Object Types' => [
-                'Home'              => [],
+                'CMS'               => [],
                 'Admin'             => [],
+                'Error'             => [],
             ],
         ];
     }
