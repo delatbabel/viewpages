@@ -15,58 +15,36 @@ class ExamplePageSeeder extends Seeder
         return base_path('database/seeds/examples');
     }
 
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    protected function loadFiles($dirname = null)
     {
-        // Sample page directory
         $topdir = $this->getBasePath();
 
-        foreach (scandir($topdir) as $dirname) {
-            // Read all of the files and directories under the top level directory.
-            if (($dirname == '.') || ($dirname == '..')) {
+        // Find the full path name to scan
+        if (empty($dirname)) {
+            $scanthis = $topdir;
+        } else {
+            $scanthis = $topdir . DIRECTORY_SEPARATOR . $dirname;
+        }
+
+        foreach (scandir($scanthis) as $filename) {
+
+            // Skip directory link files
+            if (($filename == '.') || ($filename == '..')) {
                 continue;
             }
 
-            // If it's a file, load it directly.
-            // As of Laravel v5.1.32 someone made a change:
-            // https://github.com/laravel/framework/commit/70e504da5ad395d87467826e528dc9edf3f36ef3
-            // Means that pages must have the "." as part of the page type.  If you are on a prior
-            // version of Laravel you can remove the "." from in front of the $pagetype variables.
-            if (! is_dir($topdir . DIRECTORY_SEPARATOR . $dirname)) {
-                if (strpos($dirname, '.blade.php')) {
-                    $page_name = str_replace('.blade.php', '', $dirname);
-                    $pagetype  = '.blade.php';
-                } elseif (strpos($dirname, '.twig')) {
-                    $page_name = str_replace('.twig', '', $dirname);
-                    $pagetype  = '.twig';
+            if (is_dir($scanthis . DIRECTORY_SEPARATOR . $filename)) {
+                // Recurse into lower level directory
+                if (empty($dirname)) {
+                    $this->loadFiles($filename);
                 } else {
-                    echo "No template type for $dirname, skipping\n";
-                    continue;
+                    $this->loadFiles($dirname . DIRECTORY_SEPARATOR . $filename);
                 }
+            } else {
 
-                // Create the page
-                Vpage::create([
-                    'pagekey'           => $page_name,
-                    'url'               => $page_name,
-                    'name'              => $page_name,
-                    'pagetype'          => $pagetype,
-                    'description'       => $page_name . ' page loaded from ' . $dirname,
-                    'content'           => file_get_contents($topdir . DIRECTORY_SEPARATOR .
-                        $dirname),
-                ]);
-                continue;
-            }
+                // This is a file.  Load it into the database.
 
-            // Read all of the files in each directory.
-            foreach (scandir($topdir . DIRECTORY_SEPARATOR . $dirname) as $filename) {
-                if (($filename == '.') || ($filename == '..')) {
-                    continue;
-                }
-
+                // Find the page name and the page type
                 if (strpos($filename, '.blade.php')) {
                     $page_name = str_replace('.blade.php', '', $filename);
                     $pagetype  = '.blade.php';
@@ -78,17 +56,42 @@ class ExamplePageSeeder extends Seeder
                     continue;
                 }
 
+                // The directory key is the directory name with / replaced by .
+                // This is prepended to the page name to get the full page key
+                $dirkey = str_replace('/', '.', $dirname);
+
                 // Create the page
-                Vpage::create([
-                    'pagekey'           => $dirname . '.' . $page_name,
-                    'url'               => $dirname . '/' . $page_name,
-                    'name'              => $dirname . '.' . $page_name,
-                    'pagetype'          => $pagetype,
-                    'description'       => $page_name . ' page loaded from ' . $dirname . '/' . $filename,
-                    'content'           => file_get_contents($topdir . DIRECTORY_SEPARATOR .
-                        $dirname . DIRECTORY_SEPARATOR . $filename),
-                ]);
+                if (empty($dirname)) {
+                    Vpage::create([
+                        'pagekey'           => $page_name,
+                        'url'               => $page_name,
+                        'name'              => $page_name,
+                        'pagetype'          => $pagetype,
+                        'description'       => $page_name . ' page loaded from ' . $filename,
+                        'content'           => file_get_contents($scanthis . DIRECTORY_SEPARATOR . $filename),
+                    ]);
+                } else {
+                    Vpage::create([
+                        'pagekey'           => $dirkey . '.' . $page_name,
+                        'url'               => $dirname . '/' . $page_name,
+                        'name'              => $dirkey . '.' . $page_name,
+                        'pagetype'          => $pagetype,
+                        'description'       => $page_name . ' page loaded from ' . $dirname . '/' . $filename,
+                        'content'           => file_get_contents($scanthis . DIRECTORY_SEPARATOR . $filename),
+                    ]);
+                }
             }
         }
+    }
+
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        // Read all of the files and directories under the top level directory.
+        $this->loadFiles();
     }
 }
