@@ -31,7 +31,8 @@ class CreateVpagesTable extends Migration
         Schema::create($this->tableName, function ($table) {
             $table->increments('id');
             $table->integer('category_id')->unsigned()->nullable();
-            $table->string('pagekey', 255)->default('')->index();
+            $table->string('namespace', 255)->default('');
+            $table->string('pagekey', 255)->default('');
             $table->string('url', 255)->default('')->index();
             $table->string('name', 255)->default('');
             $table->string('description', 255)->nullable();
@@ -40,6 +41,8 @@ class CreateVpagesTable extends Migration
             $table->longText('content')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index(['namespace', 'pagekey']);
 
             $table->foreign('category_id')
                 ->references('id')->on('categories')

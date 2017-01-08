@@ -6,11 +6,12 @@ namespace Delatbabel\ViewPages\Models;
 
 use Delatbabel\Fluents\Fluents;
 use Delatbabel\SiteConfig\Models\Website;
+use Delatbabel\ViewPages\Finders\VpageViewFinder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Fluent;
+use Log;
 
 /**
  * Class Vpage
@@ -37,7 +38,11 @@ class Vpage extends Model
 
     protected $dates = ['deleted_at'];
 
-    /** Used to separate the page name from the page type */
+    /**
+     * Used to separate the page name from the page type
+     *
+     * @var string
+     */
     const EXTENSION_SEPARATOR = '||';
 
     /**
@@ -85,9 +90,10 @@ class Vpage extends Model
      *
      * @param string $url
      * @param string $field 'pagekey' or 'url'
+     * @param string $namespace
      * @return Fluent|null
      */
-    public static function fetch($url = 'index', $field = 'pagekey')
+    public static function fetch($url = 'index', $field = 'pagekey', $namespace = '')
     {
         // Sanitise the URL
         $url = filter_var($url, FILTER_SANITIZE_STRING);
@@ -125,6 +131,7 @@ class Vpage extends Model
         // Try to find a page that is joined to the current website
         /** @var Vpage $page */
         $page = static::where($field, '=', $url)
+            ->where('vpages.namespace', '=', $namespace)
             ->join('vpage_website', 'vpages.id', '=', 'vpage_website.vpage_id')
             ->where('vpage_website.website_id', '=', $website_id)
             ->select('vpages.id AS id',
@@ -144,6 +151,7 @@ class Vpage extends Model
         // to any website
         /** @var Vpage $page */
         $page = static::where($field, '=', $url)
+            ->where('vpages.namespace', '=', $namespace)
             ->leftJoin('vpage_website', 'vpages.id', '=', 'vpage_website.vpage_id')
             ->whereNull('vpage_website.website_id')
             ->select('vpages.id AS id',
@@ -194,9 +202,18 @@ class Vpage extends Model
     public static function make($url = 'index')
     {
         // Find by pagekey first.  Convert any '/' characters injected
-        // into the search back to '.' characters.
+        // into the search back to '.' characters and allow for namespaced
+        // views.
         $pagekey = strtr($url, '/', '.');
-        $page    = static::fetch($pagekey, 'pagekey');
+        $segments = explode(VpageViewFinder::HINT_PATH_DELIMITER, $pagekey);
+        if (count($segments) == 2) {
+            // Namespaced view
+            $page    = static::fetch($segments[1], 'pagekey', $segments[0]);
+        } else {
+            // Not namespaced view
+            $page    = static::fetch($pagekey, 'pagekey');
+        }
+
 
         // Then find by URL if pagekey is not found
         if (empty($page)) {
