@@ -17,7 +17,8 @@
         "delatbabel/nestedcategories": "dev-master",
         "illuminate/support": "5.1.*",
         "illuminate/view": "5.1.*",
-        "rcrowe/twigbridge": "^0.9.2"
+        "rcrowe/twigbridge": "^0.9.2",
+        "twig/twig": "1.*"
     },
     "autoload": {
         "psr-4": {
