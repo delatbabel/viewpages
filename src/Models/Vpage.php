@@ -208,7 +208,8 @@ class Vpage extends Model
         $segments = explode(VpageViewFinder::HINT_PATH_DELIMITER, $pagekey);
         if (count($segments) == 2) {
             // Namespaced view
-            $page    = static::fetch($segments[1], 'pagekey', $segments[0]);
+            // $page = static::fetch($segments[1], 'pagekey', $segments[0]);
+            $page    = static::fetch("vendor.$segments[0].$segments[1]", 'pagekey');
         } else {
             // Not namespaced view
             $page    = static::fetch($pagekey, 'pagekey');
