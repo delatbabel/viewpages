@@ -27,7 +27,7 @@ class PageForm
      */
     public function getBladeViewIndex()
     {
-        return 'adminmodel.pages.index';
+        return 'admin.model.pages.index';
     }
 
     /**
@@ -49,7 +49,7 @@ class PageForm
      */
     public function getBladeViewForm()
     {
-        return 'adminmodel.pages.form';
+        return 'admin.model.pages.form';
     }
 
     /**

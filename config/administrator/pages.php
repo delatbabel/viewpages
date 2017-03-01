@@ -7,7 +7,7 @@
 return [
     'title'              => 'Pages',
     'single'             => 'page',
-    'model'              => '\Delatbabel\ViewPages\Models\Vpage',
+    'model'              => \Delatbabel\ViewPages\Models\Vpage::class,
     'server_side'        => true,
     /**
      * The display columns
@@ -113,5 +113,5 @@ return [
             'height' => 20, //optional, defaults to 100
         ],
     ],
-    'controller_handler' => \App\Http\Controllers\PageController::class,
+    'controller_handler' => \Delatbabel\ViewPages\Http\Controllers\PageController::class,
 ];

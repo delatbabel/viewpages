@@ -48,6 +48,10 @@ class ViewPagesServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config' => config_path()
         ], 'config');
+        // TODO: Instead of publishing the views, load them up into the database using a seeder.
+        $this->publishes([
+            __DIR__ . '/../resources/views' => base_path('resources/views')
+        ], 'views');
 
         // Register other providers required by this provider, which saves the caller
         // from having to register them each individually.
