@@ -15,8 +15,8 @@
         "delatbabel/fluents": "~1.0",
         "delatbabel/site-config": "dev-master",
         "delatbabel/nestedcategories": "dev-master",
-        "illuminate/support": "5.1.*",
-        "illuminate/view": "5.1.*",
+        "illuminate/support": "<5.4",
+        "illuminate/view": "<5.4",
         "rcrowe/twigbridge": "^0.9.2",
         "twig/twig": "1.*"
     },
