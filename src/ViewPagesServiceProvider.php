@@ -36,7 +36,9 @@ class ViewPagesServiceProvider extends ServiceProvider
      */
     public function boot(DispatcherContract $events)
     {
-        parent::boot($events);
+        if (method_exists('Illuminate\\Support\\ServiceProvider', 'boot')) {
+            parent::boot($events);
+        }
 
         // Publish the database migrations and seeders
         $this->publishes([
