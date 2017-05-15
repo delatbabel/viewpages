@@ -50,14 +50,8 @@ return [
             'type'               => 'relationship',
             'name_field'         => 'name',
             'options_sort_field' => 'name',
-            'options_filter'     => function ($query) {
-                $obj = \Delatbabel\NestedCategories\Models\Category::where('slug', 'page-types')->first();
-                if ($obj) {
-                    $query->where('parent_id', $obj->id);
-                } else {
-                    $query->where('slug', 'page-types');
-                }
-            },
+            'options_filter' => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
+            'options_filter_params' => ['page-types']
         ],
     ],
     /**
@@ -92,14 +86,8 @@ return [
             'type'               => 'relationship',
             'name_field'         => 'name',
             'options_sort_field' => 'name',
-            'options_filter'     => function ($query) {
-                $obj = \Delatbabel\NestedCategories\Models\Category::where('slug', 'page-types')->first();
-                if ($obj) {
-                    $query->where('parent_id', $obj->id);
-                } else {
-                    $query->where('slug', 'page-types');
-                }
-            },
+            'options_filter' => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
+            'options_filter_params' => ['page-types']
         ],
         'websites'    => [
             'title'              => 'Websites',
