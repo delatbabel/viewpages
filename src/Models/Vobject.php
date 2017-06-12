@@ -107,8 +107,7 @@ class Vobject extends Model
             ->where('vobject_website.website_id', '=', $website_id)
             ->select('vobjects.id AS id',
                 'vobjects.content AS content',
-                'vobjects.updated_at AS updated_at',
-                'vobjects.objecttype AS objecttype')
+                'vobjects.updated_at AS updated_at')
             ->first();
         if (! empty($object)) {
             #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
@@ -126,8 +125,7 @@ class Vobject extends Model
             ->whereNull('vobject_website.website_id')
             ->select('vobjects.id AS id',
                 'vobjects.content AS content',
-                'vobjects.updated_at AS updated_at',
-                'vobjects.objecttype AS objecttype')
+                'vobjects.updated_at AS updated_at')
             ->first();
         if (empty($object)) {
             return null;
