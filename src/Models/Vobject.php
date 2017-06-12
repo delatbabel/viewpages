@@ -20,7 +20,7 @@ use Illuminate\Support\Fluent;
  * ### Example
  *
  * <code>
- * $object = Vobject::make('homepage_title');
+ * $object = Vobject::make('homeobject_title');
  * </code>
  *
  * ### TODO
@@ -32,19 +32,19 @@ class Vobject extends Model
 {
     use SoftDeletes, Fluents;
 
-    protected $fillable = ['website_id', 'objectkey', 'name', 'description',
+    protected $fillable = ['category_id', 'objectkey', 'name', 'description',
         'content'];
 
     protected $dates = ['deleted_at'];
 
     /**
-     * 1:Many relationship with Website model
+     * Many:Many relationship with Website model
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function website()
+    public function websites()
     {
-        return $this->belongsTo('\Delatbabel\SiteConfig\Models\Website');
+        return $this->belongsToMany('\Delatbabel\SiteConfig\Models\Website');
     }
 
     /**
@@ -60,42 +60,55 @@ class Vobject extends Model
     /**
      * Fetch a object by objectkey or url.
      *
-     * Returns a Vobject object for a specific objectkey for the current website.
+     * Returns a Vobject object for a specific objectkey or URL for the
+     * current website.
      *
-     * Multiple objects can exist in the vobjects table for any given objectkey.
+     * A Vobject object can either be for a specific website or websites,
+     * in which case there will be a join table entry in vobject_website
+     * containing (vobject_id, website_id), or the Vobject can be for all
+     * websites, which means that there will be no join table entry in
+     * vobject_website for that vobject_id at all (for any website).
+     *
+     * Multiple objects can exist in the vobjects table for any given URL.
      *
      * This function finds the correct object in vobjects that matches the
-     * given objectkey and belongs to the current website, or if that fails
-     * then it will find the correct object in vobjects for the given objectkey
-     * that has no relations to any website.
+     * given URL and has a join to the current website, or if that fails
+     * then it will find the correct object in vobjects for the given URL
+     * that has no joins to any website.
      *
      * @param string $objectkey
      * @return Fluent
      */
     public static function make($objectkey = 'index')
     {
-        // Sanitise the key
+        // Sanitise the URL
         $objectkey = filter_var($objectkey, FILTER_SANITIZE_STRING);
 
-        if (empty($objectkey)) {
-            // An empty URL indicates that the home object is being fetched.
-            $objectkey = 'index';
-        }
+        #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+        #    'Looking for vobject where objectkey = ' . $objectkey);
 
         // Find the current website ID
         $website_id = Website::currentWebsiteId();
 
-        // Check for a cached copy
+        // We seem to do a lot of object fetching twice here, often to
+        // get the object type, then to get the content and also the updated_at
+        // time.  Cache the results after one fetch.
         $cache_key = 'vobject__' . $website_id . '__' . $objectkey;
         if (Cache::has($cache_key)) {
+            #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+            #    'Found in cache');
             return Cache::get($cache_key);
         }
 
         // Try to find a object that is joined to the current website
         /** @var Vobject $object */
         $object = static::where('objectkey', '=', $objectkey)
-            ->where('website_id', '=', $website_id)
-            ->select(['id', 'name', 'content', 'updated_at'])
+            ->join('vobject_website', 'vobjects.id', '=', 'vobject_website.vobject_id')
+            ->where('vobject_website.website_id', '=', $website_id)
+            ->select('vobjects.id AS id',
+                'vobjects.content AS content',
+                'vobjects.updated_at AS updated_at',
+                'vobjects.objecttype AS objecttype')
             ->first();
         if (! empty($object)) {
             #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
@@ -109,8 +122,12 @@ class Vobject extends Model
         // to any website
         /** @var Vobject $object */
         $object = static::where('objectkey', '=', $objectkey)
-            ->whereNull('website_id')
-            ->select(['id', 'name', 'content', 'updated_at'])
+            ->leftJoin('vobject_website', 'vobjects.id', '=', 'vobject_website.vobject_id')
+            ->whereNull('vobject_website.website_id')
+            ->select('vobjects.id AS id',
+                'vobjects.content AS content',
+                'vobjects.updated_at AS updated_at',
+                'vobjects.objecttype AS objecttype')
             ->first();
         if (empty($object)) {
             return null;

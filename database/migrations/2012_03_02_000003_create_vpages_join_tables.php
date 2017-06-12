@@ -34,6 +34,21 @@ class CreateVpagesJoinTables extends Migration
                 ->onDelete('set null')
                 ->onUpdate('cascade');
         });
+
+        Schema::create('vobject_website', function ($table) {
+            $table->increments('id');
+            $table->integer('vobject_id')->unsigned();
+            $table->integer('website_id')->unsigned()->nullable();
+
+            $table->foreign('vobject_id')
+                ->references('id')->on('vobjects')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->foreign('website_id')
+                ->references('id')->on('websites')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+        });
     }
 
     /**
