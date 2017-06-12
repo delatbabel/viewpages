@@ -79,8 +79,8 @@ class BaseObjectSeeder extends Seeder
                     ]);
                 } else {
                     $object = Vobject::create([
-                        'objectkey'         => $dirkey . '.' . $object_name,
-                        'name'              => $dirkey . '.' . $object_name,
+                        'objectkey'         => $dirkey . '_' . $object_name,
+                        'name'              => $dirkey . '_' . $object_name,
                         'description'       => $object_name . ' object loaded from ' . $dirname . '/' . $filename,
                         'content'           => file_get_contents($scanthis . DIRECTORY_SEPARATOR . $filename),
                     ]);

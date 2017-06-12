@@ -82,7 +82,7 @@ class Vobject extends Model
     public static function make($objectkey = 'index')
     {
         // Sanitise the URL
-        $objectkey = filter_var($objectkey, FILTER_SANITIZE_STRING);
+        $objectkey = filter_var($objectkey, FILTER_SANITIZE_SPECIAL_CHARS);
 
         #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
         #    'Looking for vobject where objectkey = ' . $objectkey);

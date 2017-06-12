@@ -96,7 +96,7 @@ class Vpage extends Model
     public static function fetch($url = 'index', $field = 'pagekey', $namespace = '')
     {
         // Sanitise the URL
-        $url = filter_var($url, FILTER_SANITIZE_STRING);
+        $url = filter_var($url, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (empty($url)) {
             // An empty URL indicates that the home page is being fetched.
