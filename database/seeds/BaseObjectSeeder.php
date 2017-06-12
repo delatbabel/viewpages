@@ -1,9 +1,9 @@
 <?php
 
-use Delatbabel\ViewPages\Models\Vpage;
+use Delatbabel\ViewPages\Models\Vobject;
 use Illuminate\Database\Seeder;
 
-class ExamplePageSeeder extends Seeder
+class BaseObjectSeeder extends Seeder
 {
     /**
      * Override this function to provide a base path
@@ -12,7 +12,20 @@ class ExamplePageSeeder extends Seeder
      */
     protected function getBasePath()
     {
-        return base_path('database/seeds/examples');
+        return base_path('database/seeds/objects');
+    }
+
+    /**
+     * Page creation hook.
+     *
+     * Override this function in sub classes to do something with the object after it is created.
+     *
+     * @param Vobject $object
+     * @return void
+     */
+    protected function objectHook(Vobject $object)
+    {
+        // default no-op
     }
 
     protected function loadFiles($dirname = null)
@@ -44,42 +57,37 @@ class ExamplePageSeeder extends Seeder
 
                 // This is a file.  Load it into the database.
 
-                // Find the page name and the page type
-                if (strpos($filename, '.blade.php')) {
-                    $page_name = str_replace('.blade.php', '', $filename);
-                    $pagetype  = '.blade.php';
-                } elseif (strpos($filename, '.twig')) {
-                    $page_name = str_replace('.twig', '', $filename);
-                    $pagetype  = '.twig';
+                // Find the object name
+                if (strpos($filename, '.html')) {
+                    $object_name = str_replace('.html', '', $filename);
                 } else {
                     echo "No template type for $filename, skipping\n";
                     continue;
                 }
 
                 // The directory key is the directory name with / replaced by .
-                // This is prepended to the page name to get the full page key
+                // This is prepended to the object name to get the full object key
                 $dirkey = str_replace('/', '.', $dirname);
 
-                // Create the page
+                // Create the object
                 if (empty($dirname)) {
-                    Vpage::create([
-                        'pagekey'           => $page_name,
-                        'url'               => $page_name,
-                        'name'              => $page_name,
-                        'pagetype'          => $pagetype,
-                        'description'       => $page_name . ' page loaded from ' . $filename,
+                    $object = Vobject::create([
+                        'objectkey'         => $object_name,
+                        'name'              => $object_name,
+                        'description'       => $object_name . ' object loaded from ' . $filename,
                         'content'           => file_get_contents($scanthis . DIRECTORY_SEPARATOR . $filename),
                     ]);
                 } else {
-                    Vpage::create([
-                        'pagekey'           => $dirkey . '.' . $page_name,
-                        'url'               => $dirname . '/' . $page_name,
-                        'name'              => $dirkey . '.' . $page_name,
-                        'pagetype'          => $pagetype,
-                        'description'       => $page_name . ' page loaded from ' . $dirname . '/' . $filename,
+                    $object = Vobject::create([
+                        'objectkey'         => $dirkey . '.' . $object_name,
+                        'name'              => $dirkey . '.' . $object_name,
+                        'description'       => $object_name . ' object loaded from ' . $dirname . '/' . $filename,
                         'content'           => file_get_contents($scanthis . DIRECTORY_SEPARATOR . $filename),
                     ]);
                 }
+
+                // Page creation hook
+                $this->objectHook($object);
             }
         }
     }
