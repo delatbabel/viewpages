@@ -39,8 +39,6 @@ class VobjectService
      */
     public function make($objectkey)
     {
-        $objectkey    = Str::slug($objectkey);
-
         $vobject = Vobject::make($objectkey);
 
         // Return null if the object is not found

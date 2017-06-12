@@ -84,8 +84,8 @@ class Vobject extends Model
         // Sanitise the URL
         $objectkey = filter_var($objectkey, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-        #    'Looking for vobject where objectkey = ' . $objectkey);
+        Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+            'Looking for vobject where objectkey = ' . $objectkey);
 
         // Find the current website ID
         $website_id = Website::currentWebsiteId();
@@ -95,8 +95,8 @@ class Vobject extends Model
         // time.  Cache the results after one fetch.
         $cache_key = 'vobject__' . $website_id . '__' . $objectkey;
         if (Cache::has($cache_key)) {
-            #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-            #    'Found in cache');
+            Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+                'Found in cache');
             return Cache::get($cache_key);
         }
 
@@ -110,8 +110,8 @@ class Vobject extends Model
                 'vobjects.updated_at AS updated_at')
             ->first();
         if (! empty($object)) {
-            #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-            #    'Found vobject on first look,  ID == ' . $object->id);
+            Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+                'Found vobject on first look,  ID == ' . $object->id);
             $fluent = $object->toFluent();
             Cache::put($cache_key, $fluent, 60);
             return $fluent;
@@ -131,8 +131,8 @@ class Vobject extends Model
             return null;
         }
 
-        #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-        #    'Found vobject on second look,  ID == ' . $object->id);
+        Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+            'Found vobject on second look,  ID == ' . $object->id);
         $fluent = $object->toFluent();
         Cache::put($cache_key, $fluent, 60);
         return $fluent;
