@@ -67,10 +67,10 @@ return [
         ],
         'content'     => [
             'title' => 'Content',
-            'type'  => 'html',
+            'type'  => 'wysiwyg',
         ],
-        'website'     => [
-            'title'              => 'Website',
+        'websites'     => [
+            'title'              => 'Websites',
             'type'               => 'relationship',
             'name_field'         => 'name',
             'options_sort_field' => 'name',
