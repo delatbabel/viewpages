@@ -65,21 +65,23 @@ return [
             'title' => 'Description',
             'type'  => 'text',
         ],
-        'content'     => [
-            'title' => 'Content',
-            'type'  => 'wysiwyg',
+        'category'    => [
+            'title'              => 'Category <span class="text-danger">*</span>',
+            'type'               => 'relationship',
+            'name_field'         => 'name',
+            'options_sort_field' => 'name',
+            'options_filter' => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
+            'options_filter_params' => ['object-types']
         ],
-        'websites'     => [
+        'websites'    => [
             'title'              => 'Websites',
             'type'               => 'relationship',
             'name_field'         => 'name',
             'options_sort_field' => 'name',
         ],
-        'category'    => [
-            'title'              => 'Category',
-            'type'               => 'relationship',
-            'name_field'         => 'name',
-            'options_sort_field' => 'name',
+        'content'     => [
+            'title' => 'Content',
+            'type'  => 'wysiwyg',
         ],
     ],
 
