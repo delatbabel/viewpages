@@ -67,7 +67,7 @@ class BaseObjectSeeder extends Seeder
 
                 // The directory key is the directory name with / replaced by .
                 // This is prepended to the object name to get the full object key
-                $dirkey = str_replace('/', '.', $dirname);
+                $dirkey = str_replace('/', '_', $dirname);
 
                 // Create the object
                 if (empty($dirname)) {
