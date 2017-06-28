@@ -208,7 +208,7 @@ class Vpage extends Model
         // Find by pagekey first.  Convert any '/' characters injected
         // into the search back to '.' characters and allow for namespaced
         // views.
-        $pagekey = strtr($url, '/', '.');
+        $pagekey  = strtr($url, '/', '.');
         $segments = explode(VpageViewFinder::HINT_PATH_DELIMITER, $pagekey);
         if (count($segments) == 2) {
             // Namespaced view

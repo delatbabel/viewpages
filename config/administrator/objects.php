@@ -66,11 +66,11 @@ return [
             'type'  => 'text',
         ],
         'category'    => [
-            'title'              => 'Category <span class="text-danger">*</span>',
-            'type'               => 'relationship',
-            'name_field'         => 'name',
-            'options_sort_field' => 'name',
-            'options_filter' => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
+            'title'                 => 'Category <span class="text-danger">*</span>',
+            'type'                  => 'relationship',
+            'name_field'            => 'name',
+            'options_sort_field'    => 'name',
+            'options_filter'        => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
             'options_filter_params' => ['object-types']
         ],
         'websites'    => [

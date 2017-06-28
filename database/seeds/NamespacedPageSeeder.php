@@ -1,8 +1,8 @@
 <?php
 
+use Delatbabel\NestedCategories\Models\Category;
 use Delatbabel\ViewPages\Models\Vpage;
 use Illuminate\Database\Seeder;
-use Delatbabel\NestedCategories\Models\Category;
 
 class NamespacedPageSeeder extends Seeder
 {
