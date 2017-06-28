@@ -103,8 +103,8 @@ class Vpage extends Model
             $url = 'index';
         }
 
-        #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-        #    'Looking for vpage where ' . $field . ' = ' . $url);
+        Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+            'Looking for vpage where ' . $field . ' = ' . $url . ', namespace = ' . $namespace);
 
         // Determine whether there is an extension separator on the page
         // key or not, and strip it off if there is one present.
@@ -121,10 +121,14 @@ class Vpage extends Model
         // We seem to do a lot of page fetching twice here, often to
         // get the page type, then to get the content and also the updated_at
         // time.  Cache the results after one fetch.
-        $cache_key = 'vpage__' . $website_id . '__' . $url;
+        if (empty($namespace)) {
+            $cache_key = 'vpage__' . $website_id . '__' . $url;
+        } else {
+            $cache_key = 'vpage__' . $website_id . '__' . $namespace . '::' . $url;
+        }
         if (Cache::has($cache_key)) {
-            #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-            #    'Found in cache');
+            Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+                'Found in cache');
             return Cache::get($cache_key);
         }
 
@@ -140,8 +144,8 @@ class Vpage extends Model
                 'vpages.pagetype AS pagetype')
             ->first();
         if (! empty($page)) {
-            #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-            #    'Found vpage on first look,  ID == ' . $page->id);
+            Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+                'Found vpage on first look,  ID == ' . $page->id);
             $fluent = $page->toFluent();
             Cache::put($cache_key, $fluent, 60);
             return $fluent;
@@ -163,8 +167,8 @@ class Vpage extends Model
             return null;
         }
 
-        #Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
-        #    'Found vpage on second look,  ID == ' . $page->id);
+        Log::debug(__CLASS__ . ':' . __TRAIT__ . ':' . __FILE__ . ':' . __LINE__ . ':' . __FUNCTION__ . ':' .
+            'Found vpage on second look,  ID == ' . $page->id);
         $fluent = $page->toFluent();
         Cache::put($cache_key, $fluent, 60);
         return $fluent;
@@ -208,8 +212,8 @@ class Vpage extends Model
         $segments = explode(VpageViewFinder::HINT_PATH_DELIMITER, $pagekey);
         if (count($segments) == 2) {
             // Namespaced view
-            // $page = static::fetch($segments[1], 'pagekey', $segments[0]);
-            $page    = static::fetch("vendor.$segments[0].$segments[1]", 'pagekey');
+            $page = static::fetch($segments[1], 'pagekey', $segments[0]);
+            // $page    = static::fetch("vendor.$segments[0].$segments[1]", 'pagekey');
         } else {
             // Not namespaced view
             $page    = static::fetch($pagekey, 'pagekey');
