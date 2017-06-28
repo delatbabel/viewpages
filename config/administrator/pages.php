@@ -46,11 +46,11 @@ return [
             'title' => 'URL',
         ],
         'category' => [
-            'title'              => 'Category',
-            'type'               => 'relationship',
-            'name_field'         => 'name',
-            'options_sort_field' => 'name',
-            'options_filter' => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
+            'title'                 => 'Category',
+            'type'                  => 'relationship',
+            'name_field'            => 'name',
+            'options_sort_field'    => 'name',
+            'options_filter'        => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
             'options_filter_params' => ['page-types']
         ],
     ],
@@ -82,11 +82,11 @@ return [
             'type'  => 'text',
         ],
         'category'    => [
-            'title'              => 'Category <span class="text-danger">*</span>',
-            'type'               => 'relationship',
-            'name_field'         => 'name',
-            'options_sort_field' => 'name',
-            'options_filter' => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
+            'title'                 => 'Category <span class="text-danger">*</span>',
+            'type'                  => 'relationship',
+            'name_field'            => 'name',
+            'options_sort_field'    => 'name',
+            'options_filter'        => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
             'options_filter_params' => ['page-types']
         ],
         'websites'    => [
