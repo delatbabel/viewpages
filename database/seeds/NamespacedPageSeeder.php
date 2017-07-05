@@ -88,6 +88,7 @@ class NamespacedPageSeeder extends Seeder
 
                 // Strip off the leading namespace component
                 $dirkey = substr($dirkey, strlen($namespace));
+                $dirkey = ltrim($dirkey, '.');
 
                 // Create the page
                 if (empty($dirkey)) {
