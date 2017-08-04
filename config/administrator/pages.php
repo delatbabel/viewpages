@@ -26,6 +26,7 @@ return [
             'title' => 'Name',
         ],
         'created_at' => [
+            'type'  => 'date',
             'title' => 'Create Date',
         ],
         'category'   => [
