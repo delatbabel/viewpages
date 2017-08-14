@@ -42,10 +42,12 @@ return [
             'title' => 'Name',
         ],
         'category'  => [
-            'title'              => 'Category',
-            'type'               => 'relationship',
-            'name_field'         => 'name',
-            'options_sort_field' => 'name',
+            'title'                 => 'Category',
+            'type'                  => 'relationship',
+            'name_field'            => 'name',
+            'options_sort_field'    => 'name',
+            'options_filter'        => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
+            'options_filter_params' => ['object-types']
         ],
     ],
 
