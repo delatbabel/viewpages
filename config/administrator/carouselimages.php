@@ -27,17 +27,17 @@ return [
      */
     'filters' => [
         'carousels' => [
-            'type' => 'relationship',
-            'title' => 'Carousels',
-            'name_field' => 'name',
+            'type'               => 'relationship',
+            'title'              => 'Carousels',
+            'name_field'         => 'name',
             'options_sort_field' => 'name',
         ],
         'status' => [
-            'title' => 'Status',
-            'type' => 'enum',
+            'title'   => 'Status',
+            'type'    => 'enum',
             'options' => [
-                '' => 'All',
-                'active' => 'Active',
+                ''         => 'All',
+                'active'   => 'Active',
                 'inactive' => 'Inactive'
             ],
             'default' => 'active'
@@ -49,8 +49,8 @@ return [
      */
     'columns' => [
         'batch_select' => [
-            'title' => '',
-            'output' => '\DDPro\Admin\Helpers\AdminHelper::getOutputForCheckbox',
+            'title'    => '',
+            'output'   => '\DDPro\Admin\Helpers\AdminHelper::getOutputForCheckbox',
             'sortable' => false
         ],
         'lft' => [ // This column enable reordering feature
@@ -60,9 +60,9 @@ return [
             'title' => 'ID',
         ],
         'carousels' => [
-            'title' => 'Carousels',
+            'title'        => 'Carousels',
             'relationship' => 'carousels',
-            'select' => "GROUP_CONCAT((:table).name ORDER BY (:table).name ASC SEPARATOR ', ')",
+            'select'       => "GROUP_CONCAT((:table).name ORDER BY (:table).name ASC SEPARATOR ', ')",
         ],
         'name' => [
             'title' => 'Name'
@@ -86,38 +86,38 @@ return [
      * The editable fields
      */
     'form_request' => \Delatbabel\ViewPages\Http\Requests\CarouselImageFormRequest::class,
-    'edit_fields' => [
-        'carousels' => array(
-            'type' => 'relationship',
-            'title' => 'Carousels <span class="text-danger">*</span>',
-            'name_field' => 'name',
+    'edit_fields'  => [
+        'carousels' => [
+            'type'               => 'relationship',
+            'title'              => 'Carousels <span class="text-danger">*</span>',
+            'name_field'         => 'name',
             'options_sort_field' => 'name',
-        ),
+        ],
         'name' => [
             'title' => 'Name <span class="text-danger">*</span>'
         ],
         'path' => [
-            'title' => 'Image',
-            'type' => 'image',
-            'naming' => 'random',
-            'length' => 20,
+            'title'    => 'Image',
+            'type'     => 'image',
+            'naming'   => 'random',
+            'length'   => 20,
             'location' => 'uploads/carousels/'
         ],
         'url' => [
             'title' => 'Link'
         ],
         'use_html' => [
-            'title' => 'Use HTML',
-            'type' => 'bool',
+            'title'      => 'Use HTML',
+            'type'       => 'bool',
             'attributes' => ['class' => 'col-md-1']
         ],
         'html' => [
             'title' => 'HTML',
-            'type' => 'wysiwyg'
+            'type'  => 'wysiwyg'
         ],
         'displaying_time' => [
             'title' => 'Displaying time <span class="text-danger">*</span>',
-            'type' => 'text'
+            'type'  => 'text'
         ],
     ]
 ];

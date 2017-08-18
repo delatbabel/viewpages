@@ -29,8 +29,8 @@ class CarouselFormRequest extends FormRequest
     public function rules()
     {
         $rule = [
-            'key'  => 'required',
-            'name' => 'required',
+            'key'      => 'required',
+            'name'     => 'required',
             'end_date' => 'after:start_date'
         ];
 

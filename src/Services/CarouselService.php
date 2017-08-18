@@ -2,9 +2,9 @@
 
 namespace Delatbabel\ViewPages\Services;
 
-use Delatbabel\ViewPages\Models\Carousel;
 use Carbon\Carbon;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Delatbabel\ViewPages\Models\Carousel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

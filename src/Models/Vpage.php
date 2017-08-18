@@ -219,7 +219,6 @@ class Vpage extends Model
             $page    = static::fetch($pagekey, 'pagekey');
         }
 
-
         // Then find by URL if pagekey is not found
         if (empty($page)) {
             $page = static::fetch($url, 'url');
