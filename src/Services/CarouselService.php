@@ -24,6 +24,7 @@ class CarouselService
      */
     public function make($key)
     {
+        // FIXME: Make this less dependent on Sentinel
         $user = Sentinel::check();
         $view = 'blocks.' . $key;
 
