@@ -12,7 +12,6 @@ use Illuminate\Database\Query\Builder;
  */
 class Carousel extends Model
 {
-
     protected $table   = 'carousels';
     protected $guarded = ['id'];
     protected $dates   = ['created_at', 'updated_at', 'deleted_at', 'start_date', 'end_date'];
