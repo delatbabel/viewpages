@@ -2,8 +2,8 @@
 
 namespace Delatbabel\ViewPages\Services;
 
+use Auth;
 use Carbon\Carbon;
-use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Delatbabel\ViewPages\Models\Carousel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -24,8 +24,12 @@ class CarouselService
      */
     public function make($key)
     {
-        // FIXME: Make this less dependent on Sentinel
-        $user = Sentinel::check();
+        // If you are using Cartalyst Sentinel instead of Laravel native Auth then you will want
+        // to include this alias in your config/app.php aliases array:
+        // 'Auth'      => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
+        // If you are using native Laravel auth then use this instead:
+        // 'Auth'      => Illuminate\Support\Facades\Auth::class,
+        $user = Auth::getUser();
         $view = 'blocks.' . $key;
 
         // Set the user specific query parameters
