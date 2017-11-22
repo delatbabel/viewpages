@@ -113,7 +113,8 @@ return [
         ],
         'html' => [
             'title' => 'HTML',
-            'type'  => 'wysiwyg'
+            'type'  => 'wysiwyg',
+            'limit' => 32000,
         ],
         'displaying_time' => [
             'title' => 'Displaying time <span class="text-danger">*</span>',

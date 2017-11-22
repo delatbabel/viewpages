@@ -84,6 +84,7 @@ return [
         'content'     => [
             'title' => 'Content',
             'type'  => 'wysiwyg',
+            'limit' => 32000,
         ],
     ],
 

@@ -16,6 +16,9 @@ return [
         'id'   => [
             'title' => 'ID',
         ],
+        'namespace'    => [
+            'title' => 'Namespace',
+        ],
         'pagekey'    => [
             'title' => 'Page Key',
         ],
@@ -46,6 +49,9 @@ return [
         'url'      => [
             'title' => 'URL',
         ],
+        'namespace'      => [
+            'title' => 'Namespace',
+        ],
         'category' => [
             'title'                 => 'Category',
             'type'                  => 'relationship',
@@ -67,6 +73,18 @@ return [
             'type'    => 'text',
             'visible' => false,
         ],
+        'namespace'    => [
+            'title'   => 'Namespace',
+            'type'    => 'text',
+        ],
+        'category'    => [
+            'title'                 => 'Category <span class="text-danger">*</span>',
+            'type'                  => 'relationship',
+            'name_field'            => 'name',
+            'options_sort_field'    => 'name',
+            'options_filter'        => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
+            'options_filter_params' => ['page-types']
+        ],
         'pagekey'     => [
             'title' => 'Page Key',
             'type'  => 'text',
@@ -81,14 +99,6 @@ return [
         'description' => [
             'title' => 'Description',
             'type'  => 'text',
-        ],
-        'category'    => [
-            'title'                 => 'Category <span class="text-danger">*</span>',
-            'type'                  => 'relationship',
-            'name_field'            => 'name',
-            'options_sort_field'    => 'name',
-            'options_filter'        => '\Delatbabel\NestedCategories\Helpers\CategoryHelper::filterCategoriesByParentSlug',
-            'options_filter_params' => ['page-types']
         ],
         'websites'    => [
             'title'              => 'Websites',
